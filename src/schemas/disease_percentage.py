@@ -4,5 +4,5 @@ from typing import Dict
 from src.enums.disease_type import DiseaseType
 
 
-class DiseasePercentageMap(BaseModel):
-    RootModel: Dict[DiseaseType, int]
+class DiseasePercentageMap(RootModel[Dict[DiseaseType, int]]):
+    pass
