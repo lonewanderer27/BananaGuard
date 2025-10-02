@@ -25,7 +25,7 @@ async def detect(photo: UploadFile):
             detail=f"Invalid filetype. The only allowed filetypes are {', '.join(ALLOWED_MIMETYPES)}.")
 
     return {
-        DiseaseType.BBTV.value: 0,
-        DiseaseType.Panama.value: 0,
-        DiseaseType.BlackSigatoka.value: 0
+        DiseaseType.BlackSigatoka: 85,
+        DiseaseType.BBTV: 60,
+        DiseaseType.Panama: 40,
     }
