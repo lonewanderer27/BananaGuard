@@ -6,7 +6,7 @@ COPY pyproject.toml poetry.lock ./
 RUN pip install poetry && poetry install --no-root
 
 COPY ./src ./src
-# COPY ../model ./model
+COPY ../model ./model
 
 EXPOSE 8000
 
