@@ -7,3 +7,11 @@ services:
     volumes:
       - ./model:/app/model
       - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: "banana_web"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
