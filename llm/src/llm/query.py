@@ -47,7 +47,7 @@ def generate_response(query_text: str, context_text: str, model_name: str = "gem
     return response_text
 
 
-def query_rag(query_text: str, k: int = 5, model_name: str = "gemma3:1b"):
+def query_rag(query_text: str, k: int = 5, model_name: str = "gemma3:1b", show_sources: bool = True):
     db = load_db()
     context_text, sources = retrieve_context(db, query_text, k=k)
 
@@ -56,7 +56,12 @@ def query_rag(query_text: str, k: int = 5, model_name: str = "gemma3:1b"):
         return ""
 
     response_text = generate_response(query_text, context_text, model_name=model_name)
-    formatted_response = f"Response:\n{response_text}\n\nSources:\n" + "\n".join(sources)
+
+    if show_sources:
+        formatted_response = f"Response:\n{response_text}\n\nSources:\n" + "\n".join(sources)
+    else:
+        formatted_response = f"Response:\n{response_text}"
+
     print(formatted_response)
     return response_text
 
@@ -66,9 +71,12 @@ def main():
     parser.add_argument("query_text", type=str, help="The query text.")
     parser.add_argument("--k", type=int, default=5, help="Number of chunks to retrieve")
     parser.add_argument("--model", type=str, default="gemma3:1b", help="Ollama model name")
+    parser.add_argument(
+        "--no-sources", action="store_true", help="Do not display source IDs"
+    )
     args = parser.parse_args()
 
-    query_rag(args.query_text, k=args.k, model_name=args.model)
+    query_rag(args.query_text, k=args.k, model_name=args.model, show_sources=not args.no_sources)
 
 
 if __name__ == "__main__":
