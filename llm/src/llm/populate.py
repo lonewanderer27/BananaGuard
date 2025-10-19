@@ -97,8 +97,19 @@ def update_chroma(chunks: list[Document]):
     print("✅ Update complete")
 
 def main():
-    content = load_main_documents()
-    print(content)
+    # Load documents
+    main_docs = load_main_documents()
+    other_docs = load_other_documents()
+    all_docs = main_docs + other_docs
+
+    # Split into chunks
+    chunks = split_documents(all_docs)
+
+    # Add hashes and IDs
+    chunks = add_hashes(chunks)
+
+    # Update Chroma DB
+    update_chroma(chunks)
 
 if __name__ == "__main__":
     main()
