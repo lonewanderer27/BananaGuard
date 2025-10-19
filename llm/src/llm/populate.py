@@ -96,7 +96,10 @@ def update_chroma(chunks: list[Document]):
 
     print("✅ Update complete")
 
-def main():
+def main(reset: bool = False):
+    if reset:
+        clear_db()
+
     # Load documents
     main_docs = load_main_documents()
     other_docs = load_other_documents()
@@ -112,4 +115,10 @@ def main():
     update_chroma(chunks)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--reset", action="store_true", help="Reset the database")
+    args = parser.parse_args()
+
+    main(reset=args.reset)
