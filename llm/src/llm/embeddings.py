@@ -1,5 +1,5 @@
-from langchain_ollama import OllamaLLM
+from langchain_ollama import OllamaEmbeddings
 
 def get_ollama_embeddings():
-    embeddings = OllamaLLM(model='nomic-embed-text')
+    embeddings = OllamaEmbeddings(model='nomic-embed-text')
     return embeddings
