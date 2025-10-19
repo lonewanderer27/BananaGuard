@@ -1,3 +1,5 @@
+import hashlib
+import re
 from pathlib import Path
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
@@ -15,7 +17,18 @@ def load_main_documents() -> list[Document]:
     """Load the main markdown file as a Document."""
     with open(MAIN_DATA_PATH, encoding="utf-8") as f:
         content = f.read()
-    return [Document(page_content=content, metadata={"source": str(MAIN_DATA_PATH)})]
+
+    sections = re.split(r"(## .*)", content)
+    docs = []
+
+    # Merge heading + content
+    for i in range(1, len(sections), 2):
+        heading = sections[i].strip()
+        body = sections[i + 1].strip() if i + 1 < len(sections) else ""
+        doc_content = f"{heading}\n{body}"
+        docs.append(Document(page_content=doc_content, metadata={"source": str(MAIN_DATA_PATH)}))
+
+    return docs
 
 def load_other_documents() -> list[Document]:
     """Load other PDFs from a directory."""
@@ -32,25 +45,16 @@ def split_documents(documents: list[Document], chunk_size=800, chunk_overlap=80)
     )
     return splitter.split_documents(documents)
 
-def calculate_chunk_ids(chunks: list[Document]) -> list[Document]:
-    """Assign unique IDs to each chunk based on source, page, and index."""
-    last_page_id = None
-    current_chunk_index = 0
-
-    for chunk in chunks:
+def add_hashes(chunks: list[Document]) -> list[Document]:
+    """Add a SHA256 hash for each chunk/section."""
+    for i, chunk in enumerate(chunks):
         source = chunk.metadata.get("source", "unknown")
         page = chunk.metadata.get("page", 0)
-        current_page_id = f"{source}:{page}"
-
-        if current_page_id == last_page_id:
-            current_chunk_index += 1
-        else:
-            current_chunk_index = 0
-
-        chunk_id = f"{current_page_id}:{current_chunk_index}"
-        chunk.metadata["id"] = chunk_id
-        last_page_id = current_page_id
-
+        content_to_hash = f"{chunk.page_content}{source}{page}"
+        chunk_hash = hashlib.sha256(content_to_hash.encode("utf-8")).hexdigest()
+        chunk.metadata["hash"] = chunk_hash
+        # Assign a temporary ID (can be replaced with final ID)
+        chunk.metadata["id"] = f"{source}:{page}:{i}"
     return chunks
 
 def insert_to_chroma(chunks: list[Document]):
