@@ -61,21 +61,40 @@ def add_hashes(chunks: list[Document]) -> list[Document]:
         chunk.metadata["id"] = f"{source}:{page}:{i}"
     return chunks
 
-def insert_to_chroma(chunks: list[Document]):
+def update_chroma(chunks: list[Document]):
     db = Chroma(persist_directory=CHROMA_PATH.as_posix(), embedding_function=get_ollama_embeddings())
 
-    # Load existing items
+    # Fetch existing records
     existing_items = db.get(include=["metadata"])
-    existing_hashes = {item["metadata"]["hash"]: item["id"] for item in existing_items.get("documents", [])}
+    existing_by_id = {item["id"]: item for item in existing_items.get("documents", [])}
 
-    # Filter new or changed chunks
-    new_chunks = [chunk for chunk in chunks if chunk.metadata["hash"] not in existing_hashes]
+    to_add = []
+    to_update = []
 
-    if new_chunks:
-        print(f"👉 Adding {len(new_chunks)} new/updated chunks")
-        db.add_documents(new_chunks, ids=[chunk.metadata["id"] for chunk in new_chunks])
-    else:
-        print("✅ No changes detected")
+    for chunk in chunks:
+        chunk_id = chunk.metadata["id"]
+        chunk_hash = chunk.metadata["hash"]
+
+        if chunk_id not in existing_by_id:
+            to_add.append(chunk)
+        elif existing_by_id[chunk_id]["metadata"].get("hash") != chunk_hash:
+            to_update.append(chunk)
+
+    # Add new chunks
+    if to_add:
+        print(f"👉 Adding {len(to_add)} new chunks")
+        db.add_documents(to_add, ids=[c.metadata["id"] for c in to_add])
+
+    # Update changed chunks
+    if to_update:
+        print(f"🔄 Updating {len(to_update)} changed chunks")
+        for chunk in to_update:
+            db.update_documents(
+                ids=[chunk.metadata["id"] for chunk in to_update],
+                documents=to_update
+            )
+
+    print("✅ Update complete")
 
 def main():
     content = load_main_documents()
