@@ -2,6 +2,7 @@ import hashlib
 import re
 import shutil
 from pathlib import Path
+from pprint import pprint
 import argparse
 
 from langchain_core.documents import Document
@@ -101,11 +102,21 @@ def add_hashes(chunks: list[Document]) -> list[Document]:
 
 # ------------------- Update Chroma ------------------- #
 def update_chroma(chunks: list[Document]):
-    db = Chroma(persist_directory=CHROMA_PATH.as_posix(), embedding_function=get_ollama_embeddings())
+    """
+    Add or update chunks in Chroma using hashes.
+    Works with langchain_chroma's get() limitations.
+    """
+    db = Chroma(
+        persist_directory=CHROMA_PATH.as_posix(),
+        embedding_function=get_ollama_embeddings()
+    )
 
-    # Fetch existing records
-    existing_items = db.get(include=["metadata"])
-    existing_by_id = {item["id"]: item for item in existing_items.get("documents", [])}
+    # Fetch existing documents and metadata
+    existing_items = db.get(include=["documents", "metadatas"])
+    existing_by_id = {
+        md["id"]: md
+        for md in existing_items["metadatas"]
+    }
 
     to_add = []
     to_update = []
@@ -116,7 +127,7 @@ def update_chroma(chunks: list[Document]):
 
         if chunk_id not in existing_by_id:
             to_add.append(chunk)
-        elif existing_by_id[chunk_id]["metadata"].get("hash") != chunk_hash:
+        elif existing_by_id[chunk_id].get("hash") != chunk_hash:
             to_update.append(chunk)
 
     # Add new chunks
@@ -128,12 +139,11 @@ def update_chroma(chunks: list[Document]):
     if to_update:
         print(f"🔄 Updating {len(to_update)} changed chunks")
         db.update_documents(
-            ids=[chunk.metadata["id"] for chunk in to_update],
+            ids=[c.metadata["id"] for c in to_update],
             documents=to_update
         )
 
-    print("✅ Update complete")
-
+    print("✅ Chroma database is up-to-date")
 
 # ------------------- Main Workflow ------------------- #
 def main(reset: bool = False):
@@ -148,8 +158,10 @@ def main(reset: bool = False):
     # Add hashes & IDs
     all_chunks = add_hashes(all_chunks)
 
-    # # Update Chroma
-    # update_chroma(all_chunks)
+    # pprint(all_chunks, indent=4)
+
+    # Update Chroma
+    update_chroma(all_chunks)
 
 
 # ------------------- Entry Point ------------------- #
@@ -157,4 +169,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--reset", action="store_true", help="Reset database")
     args = parser.parse_args()
-    main(reset=args.reset)Ï
+    main(reset=args.reset)
