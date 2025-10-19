@@ -1,8 +1,9 @@
 # 🍌 Banana Disease Reference
 
-## Panama Disease / Fusarium Wilt (including TR4)
+## Panama
 
-ID: Panama
+**Name**
+Panama Disease / Fusarium Wilt (including TR4)
 
 **Definition / Pathogen**  
 Soil-borne fungal wilt caused by *Fusarium oxysporum* f. sp. *cubense* (especially Tropical Race 4 = TR4), a persistent soil pathogen that colonizes roots and vascular tissue. Major threat to Cavendish and many cultivars. (ScienceDirect)
@@ -32,9 +33,9 @@ No reliable chemical eradicates TR4 in soil. Soil fumigants are impractical for 
 
 ---
 
-## BBTV — Banana Bunchy Top Virus
+## BBTV
 
-ID: BBTV
+Name: BBTV — Banana Bunchy Top Virus
 
 **Definition / Pathogen**  
 Viral disease caused by Banana bunchy top virus (BBTV), one of the most damaging banana viruses in Southeast Asia and the Philippines. Virus persists in plant tissue; no chemical cure. (PMC)
@@ -63,9 +64,9 @@ No antiviral chemicals exist. Aphid vectors can be managed with selective insect
 
 ---
 
-## Black Sigatoka (Black Leaf Streak) — *Mycosphaerella fijiensis*
+## BlackSigatoka
 
-ID: BlackSigatoka
+Name: Black Sigatoka (Black Leaf Streak) — *Mycosphaerella fijiensis*
 
 **Definition / Pathogen**  
 Fungal leaf spot disease that reduces photosynthetic leaf area, causes premature ripening, and major yield loss in humid tropics. (PMC)
@@ -94,7 +95,7 @@ Fungicide sprays are essential in commercial plantations. Use systemic (triazole
 
 ---
 
-## Summary of Key Takeaways
+## Summary
 
 | Disease | ID            | Cause            | Key Management | Notes |
 |----------|---------------|-------------------|----------------|-------|
