@@ -1,8 +1,9 @@
 import hashlib
 import re
+import shutil
 from pathlib import Path
+import argparse
 
-from chromadb.errors import ChromaError
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFDirectoryLoader
@@ -10,57 +11,95 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from llm.embeddings import get_ollama_embeddings
 
+# ------------------- Paths ------------------- #
 CHROMA_PATH = Path(__file__).parent.parent.parent / 'chroma'
 MAIN_DATA_PATH = Path(__file__).parent.parent.parent / 'data' / 'main' / 'diseases.md'
 OTHER_DATA_PATH = Path(__file__).parent.parent.parent / 'data' / 'other'
 
+
+# ------------------- Clear Database ------------------- #
 def clear_db():
-    pass
+    if CHROMA_PATH.exists():
+        shutil.rmtree(CHROMA_PATH)
+        print("✨ Cleared Chroma database")
 
-def load_main_documents() -> list[Document]:
-    """Load the main markdown file as a Document."""
-    with open(MAIN_DATA_PATH, encoding="utf-8") as f:
-        content = f.read()
 
-    sections = re.split(r"(## .*)", content)
-    docs = []
+# ------------------- Document Splitter ------------------- #
+def split_document_content(doc: Document, chunk_size=1200, chunk_overlap=100) -> list[Document]:
+    """
+    Split a single Document into chunks using RecursiveCharacterTextSplitter.
+    Returns a list of Document chunks.
+    """
+    if len(doc.page_content) <= chunk_size:
+        return [doc]
 
-    # Merge heading + content
-    for i in range(1, len(sections), 2):
-        heading = sections[i].strip()
-        body = sections[i + 1].strip() if i + 1 < len(sections) else ""
-        doc_content = f"{heading}\n{body}"
-        docs.append(Document(page_content=doc_content, metadata={"source": str(MAIN_DATA_PATH)}))
-
-    return docs
-
-def load_other_documents() -> list[Document]:
-    """Load other PDFs from a directory."""
-    loader = PyPDFDirectoryLoader(OTHER_DATA_PATH)
-    return loader.load()
-
-def split_documents(documents: list[Document], chunk_size=800, chunk_overlap=80) -> list[Document]:
-    """Split documents into chunks."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         length_function=len,
-        is_separator_regex=False,
+        is_separator_regex=False
     )
-    return splitter.split_documents(documents)
+    return splitter.split_documents([doc])
 
+
+def split_documents(docs: list[Document], chunk_size=1200, chunk_overlap=100) -> list[Document]:
+    """
+    Split a list of Documents into chunks.
+    """
+    all_chunks = []
+    for doc in docs:
+        all_chunks.extend(split_document_content(doc, chunk_size, chunk_overlap))
+    return all_chunks
+
+
+# ------------------- Load Markdown ------------------- #
+def load_main_documents(chunk_size=1200, chunk_overlap=100) -> list[Document]:
+    """
+    Load main Markdown file, one chunk per disease.
+    Long sections are automatically split into sub-chunks.
+    """
+    with open(MAIN_DATA_PATH, encoding="utf-8") as f:
+        content = f.read()
+
+    # Split by top-level headings (##)
+    sections = re.split(r"(## .*)", content)
+    docs = []
+
+    for i in range(1, len(sections), 2):
+        heading = sections[i].strip()
+        body = sections[i + 1].strip() if i + 1 < len(sections) else ""
+        doc_content = f"{heading}\n{body}"
+        doc = Document(page_content=doc_content, metadata={"source": str(MAIN_DATA_PATH)})
+
+        # Split long disease sections
+        docs.extend(split_document_content(doc, chunk_size, chunk_overlap))
+
+    return docs
+
+
+# ------------------- Load PDFs ------------------- #
+def load_other_documents(chunk_size=800, chunk_overlap=80) -> list[Document]:
+    """Load PDF documents and split them."""
+    loader = PyPDFDirectoryLoader(OTHER_DATA_PATH)
+    docs = loader.load()
+    return split_documents(docs, chunk_size, chunk_overlap)
+
+
+# ------------------- Hashes & IDs ------------------- #
 def add_hashes(chunks: list[Document]) -> list[Document]:
-    """Add a SHA256 hash for each chunk/section."""
+    """Add SHA256 hash and unique ID for each chunk."""
     for i, chunk in enumerate(chunks):
         source = chunk.metadata.get("source", "unknown")
         page = chunk.metadata.get("page", 0)
         content_to_hash = f"{chunk.page_content}{source}{page}"
         chunk_hash = hashlib.sha256(content_to_hash.encode("utf-8")).hexdigest()
         chunk.metadata["hash"] = chunk_hash
-        # Assign a temporary ID (can be replaced with final ID)
+        # Unique ID = source:path + page + index
         chunk.metadata["id"] = f"{source}:{page}:{i}"
     return chunks
 
+
+# ------------------- Update Chroma ------------------- #
 def update_chroma(chunks: list[Document]):
     db = Chroma(persist_directory=CHROMA_PATH.as_posix(), embedding_function=get_ollama_embeddings())
 
@@ -88,37 +127,34 @@ def update_chroma(chunks: list[Document]):
     # Update changed chunks
     if to_update:
         print(f"🔄 Updating {len(to_update)} changed chunks")
-        for chunk in to_update:
-            db.update_documents(
-                ids=[chunk.metadata["id"] for chunk in to_update],
-                documents=to_update
-            )
+        db.update_documents(
+            ids=[chunk.metadata["id"] for chunk in to_update],
+            documents=to_update
+        )
 
     print("✅ Update complete")
 
+
+# ------------------- Main Workflow ------------------- #
 def main(reset: bool = False):
     if reset:
         clear_db()
 
-    # Load documents
-    main_docs = load_main_documents()
-    other_docs = load_other_documents()
-    all_docs = main_docs + other_docs
+    # Load Markdown and PDFs
+    main_chunks = load_main_documents()
+    pdf_chunks = load_other_documents()
+    all_chunks = main_chunks + pdf_chunks
 
-    # Split into chunks
-    chunks = split_documents(all_docs)
+    # Add hashes & IDs
+    all_chunks = add_hashes(all_chunks)
 
-    # Add hashes and IDs
-    chunks = add_hashes(chunks)
+    # # Update Chroma
+    # update_chroma(all_chunks)
 
-    # Update Chroma DB
-    update_chroma(chunks)
 
+# ------------------- Entry Point ------------------- #
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser()
-    parser.add_argument("--reset", action="store_true", help="Reset the database")
+    parser.add_argument("--reset", action="store_true", help="Reset database")
     args = parser.parse_args()
-
-    main(reset=args.reset)
+    main(reset=args.reset)Ï
