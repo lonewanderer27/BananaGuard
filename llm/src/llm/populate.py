@@ -10,7 +10,7 @@ from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from llm.embeddings import get_ollama_embeddings
+from llm.embeddings import get_model_embeddings
 
 # ------------------- Paths ------------------- #
 CHROMA_PATH = Path(__file__).parent.parent.parent / 'chroma'
@@ -108,7 +108,7 @@ def update_chroma(chunks: list[Document]):
     """
     db = Chroma(
         persist_directory=CHROMA_PATH.as_posix(),
-        embedding_function=get_ollama_embeddings()
+        embedding_function=get_model_embeddings()
     )
 
     # Fetch existing documents and metadata

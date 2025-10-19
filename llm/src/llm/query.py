@@ -1,9 +1,9 @@
 import argparse
+from pathlib import Path
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.llms.ollama import Ollama
-
-from llm.embeddings import get_ollama_embeddings
+from langchain_ollama import OllamaLLM  # Updated class
+from llm.embeddings import get_model_embeddings
 from llm.populate import CHROMA_PATH
 
 PROMPT_TEMPLATE = """
@@ -17,14 +17,17 @@ Answer the question based on the above context: {question}
 """
 
 
-def load_db():
+def load_db() -> Chroma:
     """Load Chroma DB with embeddings."""
-    embedding_function = get_ollama_embeddings()
-    db = Chroma(persist_directory=CHROMA_PATH.as_posix(), embedding_function=embedding_function)
+    embedding_function = get_model_embeddings()
+    db = Chroma(
+        persist_directory=CHROMA_PATH.as_posix(),
+        embedding_function=embedding_function
+    )
     return db
 
 
-def retrieve_context(db, query_text: str, k: int = 5):
+def retrieve_context(db: Chroma, query_text: str, k: int = 5):
     """Retrieve top-k most similar chunks from Chroma."""
     results = db.similarity_search_with_score(query_text, k=k)
     if not results:
@@ -42,7 +45,8 @@ def generate_response(query_text: str, context_text: str, model_name: str = "gem
     """Generate response using Ollama LLM."""
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
-    model = Ollama(model=model_name)
+
+    model = OllamaLLM(model=model_name)
     response_text = model.invoke(prompt)
     return response_text
 
@@ -71,12 +75,15 @@ def main():
     parser.add_argument("query_text", type=str, help="The query text.")
     parser.add_argument("--k", type=int, default=5, help="Number of chunks to retrieve")
     parser.add_argument("--model", type=str, default="gemma3:1b", help="Ollama model name")
-    parser.add_argument(
-        "--no-sources", action="store_true", help="Do not display source IDs"
-    )
+    parser.add_argument("--no-sources", action="store_true", help="Do not display source IDs")
     args = parser.parse_args()
 
-    query_rag(args.query_text, k=args.k, model_name=args.model, show_sources=not args.no_sources)
+    query_rag(
+        args.query_text,
+        k=args.k,
+        model_name=args.model,
+        show_sources=not args.no_sources
+    )
 
 
 if __name__ == "__main__":
