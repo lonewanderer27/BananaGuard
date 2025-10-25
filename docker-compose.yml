@@ -40,7 +40,9 @@ services:
       resources:
         reservations:
           devices:
-            - capabilities: [gpu]
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
   chromadb:
     image: chromadb/chroma:latest
