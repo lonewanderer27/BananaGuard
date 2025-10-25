@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
 
-
 class InsightResponse(BaseModel):
     conversation_id: str = Field(
         ...,

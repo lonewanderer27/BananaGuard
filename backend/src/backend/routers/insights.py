@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from src.backend.core.logger import logger
-from src.backend.schemas.insight_request import InsightRequest
-from src.backend.schemas.insight_response import InsightResponse
+from backend.core.logger import logger
+from backend.schemas.insight_request import InsightRequest
+from backend.schemas.insight_response import InsightResponse
 
 route = APIRouter(
     prefix="/insights",
