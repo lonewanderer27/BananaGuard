@@ -43,7 +43,7 @@ services:
             - capabilities: [gpu]
 
   chromadb:
-    image: chromadb/chrome:latest
+    image: chromadb/chroma:latest
     container_name: chromadb
     ports:
       - "8002:8002"
