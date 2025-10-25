@@ -1,7 +1,7 @@
 from pydantic import RootModel, ConfigDict
 from typing import Dict
 
-from src.enums.disease_type import DiseaseType
+from src.backend.enums.disease_type import DiseaseType
 
 
 class DiseasePercentageMap(RootModel[Dict[DiseaseType, int]]):

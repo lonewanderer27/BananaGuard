@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
-from src.routers import detect
-from src.routers import insights
+from src.backend.routers import detect
+from src.backend.routers import insights
 
 bananaAPI = FastAPI(title="BananaGuard API", version="0.1")
 

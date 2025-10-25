@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 from pydantic import BaseModel, Field
 
-from src.enums.disease_type import DiseaseType
+from src.backend.enums.disease_type import DiseaseType
 
 
 class InsightRequest(BaseModel):

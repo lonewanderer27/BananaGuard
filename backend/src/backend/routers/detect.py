@@ -1,9 +1,9 @@
 from fastapi import APIRouter, UploadFile, HTTPException
 
-from src.core.constants import ALLOWED_MIMETYPES
-from src.core.logger import logger
-from src.enums.disease_type import DiseaseType
-from src.schemas.disease_percentage import DiseasePercentageMap
+from src.backend.core.constants import ALLOWED_MIMETYPES
+from src.backend.core.logger import logger
+from src.backend.enums.disease_type import DiseaseType
+from src.backend.schemas.disease_percentage import DiseasePercentageMap
 
 route = APIRouter(
     prefix="/detect",
