@@ -28,3 +28,11 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
+
+  chromadb:
+    image: chromadb/chrome:latest
+    container_name: chromadb
+    ports:
+      - "8002:8002"
+    volumes:
+      - chroma_data:/chroma
