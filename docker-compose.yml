@@ -53,3 +53,7 @@ services:
 volumes:
   ollama_data:
   chroma_data:
+
+networks:
+  default:
+    name: banana_net
