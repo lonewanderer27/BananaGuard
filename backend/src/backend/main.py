@@ -2,8 +2,15 @@ import uvicorn
 from fastapi import FastAPI
 from backend.routers import detect
 from backend.routers import insights
+from backend.core.load_model import load_model
+from contextlib import asynccontextmanager
 
-bananaAPI = FastAPI(title="BananaGuard API", version="0.1")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_model()
+    yield
+
+bananaAPI = FastAPI(lifespan=lifespan, title="BananaGuard API", version="0.1")
 
 @bananaAPI.get('/')
 async def index():
