@@ -1,8 +1,9 @@
 import os
+import keras
+import tensorflow as tf
+from keras import Model
 from pathlib import Path
 from backend.core.logger import logger
-import tensorflow as tf
-import keras
 
 MODEL_FILENAME = "banana_leaf_model.keras"
 K = keras.backend
@@ -55,8 +56,7 @@ def resolve_model_path() -> Path:
 
     raise FileNotFoundError(f"Model not found at {model_path or fallback}. Please ensure you have pulled the model from LFS")
 
-def load_model():
-    
+def load_model() -> Model:
     try:
         logger.info("Loading model...")
         model_path = resolve_model_path()

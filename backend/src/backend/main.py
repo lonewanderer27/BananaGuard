@@ -2,12 +2,17 @@ import uvicorn
 from fastapi import FastAPI
 from backend.routers import detect
 from backend.routers import insights
-from backend.core.load_model import load_model
+from backend.services.load_model import load_model
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    load_model()
+    model = load_model()
+
+    # Store model to global state
+    app.state.model =  model
+
+    # Continue exection
     yield
 
 bananaAPI = FastAPI(lifespan=lifespan, title="BananaGuard API", version="0.1")
