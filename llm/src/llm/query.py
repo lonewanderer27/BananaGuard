@@ -5,6 +5,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM  # Updated class
 from llm.embeddings import get_model_embeddings
 from llm.populate import CHROMA_PATH
+from llm.core.logger import logger
 
 PROMPT_TEMPLATE = """
 Answer the question based only on the following context:
@@ -19,12 +20,18 @@ Answer the question based on the above context: {question}
 
 def load_db() -> Chroma:
     """Load Chroma DB with embeddings."""
-    embedding_function = get_model_embeddings()
-    db = Chroma(
-        persist_directory=CHROMA_PATH.as_posix(),
-        embedding_function=embedding_function
-    )
-    return db
+    try:
+        logger.info("Loading Chroma DB...")
+        embedding_function = get_model_embeddings()
+        db = Chroma(
+            persist_directory=CHROMA_PATH.as_posix(),
+            embedding_function=embedding_function
+        )
+        logger.info("DB loaded successfully")
+        return db
+    except Exception as e:
+        logger.exception(f'Error loading Chroma DB {e}')
+        raise
 
 
 def retrieve_context(db: Chroma, query_text: str, k: int = 5):
