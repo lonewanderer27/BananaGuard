@@ -2,6 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
+  "author": "Adriane James Puzon <adrianejames27@gmail.com> (https://jay.thedev.id)",
   "type": "module",
   "scripts": {
     "dev": "vite",
