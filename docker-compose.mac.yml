@@ -1,5 +1,5 @@
 services:
-  rag:
+  llm:
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
       - CHROMA_URL=http://host.docker.internal:8002
