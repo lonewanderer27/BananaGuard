@@ -22,4 +22,6 @@ Instructions:
 - If several diseases are present, summarize relationships (e.g. co-infection risks, shared symptoms)
 - Use simple language suited for smallholder farmers in the Philippines.
 - Write naturally - no JSON or code blocks.
+- Do not invent URLs, organization names, or citations that are not explicitly in the context.
+- Use only information found in the provided reference documents.
 """

@@ -18,4 +18,6 @@ Instructions:
 - Provide practical and relevant guidance (avoid vague statements).
 - Write naturally - no JSON or code blocks.
 - Keep your tone helpful, expert or suitable for farmers in the Philippines.
+- Do not invent URLs, organization names, or citations that are not explicitly in the context.
+- Use only information found in the provided reference documents.
 """
