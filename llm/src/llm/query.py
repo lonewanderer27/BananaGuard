@@ -40,7 +40,7 @@ def retrieve_context(db: Chroma, query_text: str, k: int = 5):
     return context_text, sources
 
 
-def generate_response(query_text: str, context_text: str, type: TemplateTypes, analysis: Optional[dict[str, int]], model_name: str = "gemma3:1b"):
+def generate_response(query_text: str, context_text: str, type: TemplateTypes, analysis: Optional[dict[str, int]] = None, model_name: str = "gemma3:1b"):
     """Generate response using Ollama LLM."""
     prompt_template = ChatPromptTemplate.from_template(prompt_builder(type, context_text, query_text, analysis))
     prompt = prompt_template.format(context=context_text, question=query_text)
