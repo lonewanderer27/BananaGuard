@@ -1,0 +1,2 @@
+follow_up: str = "You MAY end with one relevant follow-up question to invite clarification or continued discussion."
+do_not_follow_up: str = "Do NOT ask any follow-up or reflective questions at the end."
