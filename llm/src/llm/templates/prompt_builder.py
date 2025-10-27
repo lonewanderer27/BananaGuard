@@ -5,7 +5,14 @@ from llm.templates.analysis_insight import analysis_insight_template
 
 def prompt_builder(type: TemplateTypes, context: str, inquiry: str, analysis: Optional[dict[str, int]]) -> str:
     if type == TemplateTypes.GeneralInquiry:
-        return general_inquiry_template(context=context, inquiry=inquiry)
+        return general_inquiry_template.format(
+            context=context, 
+            inquiry=inquiry
+        )
     elif type == TemplateTypes.AnalysisInsight:
         analysis_text = "\n".join([f"- {disease}: {confidence}%" for disease, confidence in analysis.items()])
-        return analysis_insight_template(context=context, inquiry=inquiry, analysis_summary=analysis_text)
+        return analysis_insight_template.format(
+            context=context, 
+            inquiry=inquiry, 
+            analysis_summary=analysis_text
+        )
