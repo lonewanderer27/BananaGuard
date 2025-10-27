@@ -6,15 +6,9 @@ from langchain_ollama import OllamaLLM  # Updated class
 from llm.embeddings import get_model_embeddings
 from llm.populate import CHROMA_PATH
 from llm.core.logger import logger
-
-PROMPT_TEMPLATE = """
-{context}
-
----
-
-Answer the question based on the above context: {question}
-"""
-
+from llm.templates.template_types import TemplateTypes
+from llm.templates.prompt_builder import prompt_builder
+from typing import Optional
 
 def load_db() -> Chroma:
     """Load Chroma DB with embeddings."""
@@ -46,9 +40,9 @@ def retrieve_context(db: Chroma, query_text: str, k: int = 5):
     return context_text, sources
 
 
-def generate_response(query_text: str, context_text: str, model_name: str = "gemma3:1b"):
+def generate_response(query_text: str, context_text: str, type: TemplateTypes, analysis: Optional[dict[str, int]], model_name: str = "gemma3:1b"):
     """Generate response using Ollama LLM."""
-    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+    prompt_template = ChatPromptTemplate.from_template(prompt_builder(type, context_text, query_text, analysis))
     prompt = prompt_template.format(context=context_text, question=query_text)
 
     model = OllamaLLM(model=model_name)

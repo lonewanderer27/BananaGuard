@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Query, Request
 from llm.query import load_db, retrieve_context, generate_response
 from llm.schemas.rag_response import RagResponse
+from llm.templates.template_types import TemplateTypes
 
 ask_route = APIRouter(
     prefix="/ask",
@@ -17,7 +18,7 @@ def ask(request: Request, question: str = Query(..., description="User query tex
     context_text, sources = retrieve_context(db, question)
 
     # generate a response given the context
-    response_text = generate_response(question, context_text)
+    response_text = generate_response(question, context_text, TemplateTypes.GeneralInquiry)
 
     if retrieve_sources:
         return RagResponse(sources=sources,response=response_text)

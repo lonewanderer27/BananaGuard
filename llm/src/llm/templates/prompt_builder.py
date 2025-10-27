@@ -3,7 +3,7 @@ from llm.templates.template_types import TemplateTypes
 from llm.templates.general_inquiry import general_inquiry_template
 from llm.templates.analysis_insight import analysis_insight_template
 
-def prompt_builder(type: TemplateTypes, context: str, inquiry: str, analysis: Optional[dict[str, int]]):
+def prompt_builder(type: TemplateTypes, context: str, inquiry: str, analysis: Optional[dict[str, int]]) -> str:
     if type == TemplateTypes.GeneralInquiry:
         return general_inquiry_template(context=context, inquiry=inquiry)
     elif type == TemplateTypes.AnalysisInsight:
