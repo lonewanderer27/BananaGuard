@@ -2,12 +2,12 @@ from fastapi import APIRouter, Query, Request
 from llm.query import load_db, retrieve_context, generate_response
 from llm.schemas.rag_response import RagResponse
 
-query_route = APIRouter(
-    prefix="/query",
-    tags=["Query"]
+ask_route = APIRouter(
+    prefix="/ask",
+    tags=["Ask"]
 )
 
-@query_route.get('/', response_model=RagResponse)
+@ask_route.get('/', response_model=RagResponse)
 def ask(request: Request, question: str = Query(..., description="User query text"),
               retrieve_sources: bool = False):
     # load chroma db

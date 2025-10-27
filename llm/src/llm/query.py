@@ -8,8 +8,6 @@ from llm.populate import CHROMA_PATH
 from llm.core.logger import logger
 
 PROMPT_TEMPLATE = """
-Answer the question based only on the following context:
-
 {context}
 
 ---
