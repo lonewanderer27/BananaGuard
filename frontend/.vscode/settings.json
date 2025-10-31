@@ -2,4 +2,6 @@
   "tailwindCSS.experimental.classRegex": [
     ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
 }
