@@ -12,7 +12,7 @@ insight_route = APIRouter(
 @insight_route.post('/', response_model=RagResponse)
 def insight(request: Request, body: InsightRequest):
     # load chroma db
-    db = request.app.db
+    db = request.app.state.db
 
     # retrrieve relevant texts from the source materials
     context_text, sources = retrieve_context(db, body.question)
