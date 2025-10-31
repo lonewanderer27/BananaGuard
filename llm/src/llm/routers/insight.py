@@ -18,7 +18,11 @@ def insight(request: Request, body: InsightRequest):
     context_text, sources = retrieve_context(db, body.question)
 
     # generate a response given the context
-    response_text = generate_response(body.question, context_text, TemplateTypes.AnalysisInsight)
+    response_text = generate_response(
+        body.question, 
+        context_text, 
+        TemplateTypes.AnalysisInsight,
+        analysis=body.analysis_result)
 
     if body.retrieve_sources:
         return RagResponse(sources, response=response_text)
