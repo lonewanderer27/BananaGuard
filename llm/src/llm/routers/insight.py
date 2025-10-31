@@ -25,6 +25,6 @@ def insight(request: Request, body: InsightRequest):
         analysis=body.analysis_result)
 
     if body.retrieve_sources:
-        return RagResponse(sources, response=response_text)
+        return RagResponse(sources=sources, response=response_text)
     else:
         return RagResponse(response=response_text)
