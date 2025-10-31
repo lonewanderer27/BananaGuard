@@ -13,8 +13,8 @@ class LLMServices {
   async ask(
     question: string,
     retrieveSources: boolean,
-  ): Promise<AskLlmResponse> {
-    const res = await llm.post("/query", {
+  ): Promise<InsightResponse> {
+    const res = await llm.post("/ask", {
       question,
       "retrieve_sources": retrieveSources,
     });
@@ -24,7 +24,7 @@ class LLMServices {
     question: string,
     retrieveSources: boolean,
     analysisResult: AnalysisResult,
-  ): Promise<AskLlmResponse> {
+  ): Promise<InsightResponse> {
     const res = await llm.post("/insight", {
       question,
       "retrieve_sources": retrieveSources,

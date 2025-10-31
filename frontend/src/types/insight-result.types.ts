@@ -1,4 +1,4 @@
-type AskLlmResponse = {
+type InsightResponse = {
   sources?: string[],
   response: string
 }
