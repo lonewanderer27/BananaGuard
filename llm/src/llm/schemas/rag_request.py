@@ -8,7 +8,7 @@ class AskRequest(BaseModel):
 class InsightRequest(AskRequest):
     bbtv: float
     cordana: float
-    panama: float
+    fusarium_wilt: float
     healthy: float
     pestalotiopsis: float
     sigatoka: float
