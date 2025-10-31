@@ -10,7 +10,7 @@ const llm = axios.create({
 });
 
 export class LLMServices {
-  async ask(
+  static async ask(
     question: string,
     retrieveSources: boolean,
   ): Promise<InsightResponse> {
@@ -20,7 +20,7 @@ export class LLMServices {
     });
     return res.data;
   }
-  async insight(
+  static async insight(
     question: string,
     retrieveSources: boolean,
     analysisResult: AnalysisResult,

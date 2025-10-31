@@ -10,7 +10,7 @@ const backend = axios.create({
 });
 
 export class BackendServices {
-  async detect(
+  static async detect(
     photo: File,
     sortResults?: true,
   ): Promise<AnalysisResult> {
