@@ -9,7 +9,7 @@ const llm = axios.create({
   },
 });
 
-class LLMServices {
+export class LLMServices {
   async ask(
     question: string,
     retrieveSources: boolean,

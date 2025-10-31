@@ -9,7 +9,7 @@ const backend = axios.create({
   },
 });
 
-class BackendServices {
+export class BackendServices {
   async detect(
     photo: File,
     sortResults?: true,
