@@ -1,12 +1,8 @@
 from fastapi import APIRouter, Query, Request
 from llm.query import load_db, retrieve_context, generate_response
 from llm.schemas.rag_response import RagResponse
+from llm.schemas.rag_request import AskRequest
 from llm.templates.template_types import TemplateTypes
-from pydantic import BaseModel
-
-class AskRequest(BaseModel):
-    question: str
-    retrieve_sources: bool = False
 
 ask_route = APIRouter(
     prefix="/ask",
