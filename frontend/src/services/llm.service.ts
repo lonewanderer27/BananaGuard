@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { AnalysisResult } from "@/types/analysis-result.types";
+import { InsightResult } from "@/types/insight-result.types";
 
 const llm = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL ?? "http://localhost:8001",
@@ -14,7 +15,7 @@ export class LLMServices {
   static async ask(
     question: string,
     retrieveSources: boolean,
-  ): Promise<InsightResponse> {
+  ): Promise<InsightResult> {
     const res = await llm.post("/ask", {
       question,
       retrieve_sources: retrieveSources,
@@ -26,7 +27,7 @@ export class LLMServices {
     question: string,
     retrieveSources: boolean,
     analysisResult: AnalysisResult,
-  ): Promise<InsightResponse> {
+  ): Promise<InsightResult> {
     const res = await llm.post("/insight", {
       question,
       retrieve_sources: retrieveSources,

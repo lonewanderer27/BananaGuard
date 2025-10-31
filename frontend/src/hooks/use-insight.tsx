@@ -4,7 +4,7 @@ import { useSetAtom } from "jotai";
 import { insightResultAtom } from "@/atoms";
 import { LLMServices } from "@/services/llm.service.ts";
 import { AnalysisResult } from "@/types/analysis-result.types";
-
+import { InsightResult } from "@/types/insight-result.types";
 
 const useInsight = () => {
   const setInsightResult = useSetAtom(insightResultAtom);
@@ -21,10 +21,10 @@ const useInsight = () => {
     }) => {
       return LLMServices.insight(question, sources, analysisResult);
     },
-    onSuccess: (data: InsightResponse) => {
+    onSuccess: (data: InsightResult) => {
       setInsightResult(data);
     },
   });
-}
+};
 
 export default useInsight;
