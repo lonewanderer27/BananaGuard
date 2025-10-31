@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from llm.routers.ask import ask_route
+from llm.routers.insight import insight_route
 from llm.query import load_db
 from contextlib import asynccontextmanager
 
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI):
 
 bananaLlm = FastAPI(title="BananaGuard LLM", version="0.1", lifespan=lifespan)
 bananaLlm.include_router(ask_route)
+bananaLlm.include_router(insight_route)
 
 @bananaLlm.get('/')
 async def index():
