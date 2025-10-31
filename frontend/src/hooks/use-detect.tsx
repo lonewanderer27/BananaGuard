@@ -5,7 +5,6 @@ import { BackendServices } from "@/services/backend.service";
 import { AnalysisResult } from "@/types/analysis-result.types";
 import { analysisResultAtom } from "@/atoms";
 
-
 const useDetect = () => {
   const setAnalysisResult = useSetAtom(analysisResultAtom);
 
@@ -17,6 +16,6 @@ const useDetect = () => {
       setAnalysisResult(data);
     },
   });
-}
+};
 
 export default useDetect;

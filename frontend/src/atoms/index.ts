@@ -1,6 +1,6 @@
 import { AnalysisResult } from "@/types/analysis-result.types";
 import { InsightResult } from "@/types/insight-result.types";
-import {atom} from "jotai";
+import { atom } from "jotai";
 
 export const imageAtom = atom<File>();
 
