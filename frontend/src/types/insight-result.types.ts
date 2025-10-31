@@ -1,4 +1,4 @@
 type InsightResponse = {
-  sources?: string[],
-  response: string
-}
+  sources?: string[];
+  response: string;
+};

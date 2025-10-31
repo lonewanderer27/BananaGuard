@@ -1,5 +1,6 @@
-import { AnalysisResult } from "@/types/analysis-result.types";
 import axios from "axios";
+
+import { AnalysisResult } from "@/types/analysis-result.types";
 
 const llm = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL ?? "http://localhost:8001",
@@ -16,8 +17,9 @@ export class LLMServices {
   ): Promise<InsightResponse> {
     const res = await llm.post("/ask", {
       question,
-      "retrieve_sources": retrieveSources,
+      retrieve_sources: retrieveSources,
     });
+
     return res.data;
   }
   static async insight(
@@ -27,9 +29,10 @@ export class LLMServices {
   ): Promise<InsightResponse> {
     const res = await llm.post("/insight", {
       question,
-      "retrieve_sources": retrieveSources,
+      retrieve_sources: retrieveSources,
       analysisResult,
     });
+
     return res.data;
   }
 }

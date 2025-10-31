@@ -1,5 +1,6 @@
-import { AnalysisResult } from "@/types/analysis-result.types";
 import axios from "axios";
+
+import { AnalysisResult } from "@/types/analysis-result.types";
 
 const backend = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL ?? "http://localhost:8000",
@@ -23,7 +24,7 @@ export class BackendServices {
     // make the request
     const res = await backend.post("/detect", formData, {
       params: {
-        "sort_results": sortResults,
+        sort_results: sortResults,
       },
     });
 
