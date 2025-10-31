@@ -1,4 +1,4 @@
-enum DiseaseType {
+export enum DiseaseType {
   BBTV = "bbtv",
   Cordana = "cordana",
   Panama = "panama",
