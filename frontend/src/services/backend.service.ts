@@ -1,3 +1,4 @@
+import { AnalysisResult } from "@/types/analysis-result.types";
 import axios from "axios";
 
 const backend = axios.create({
@@ -12,7 +13,7 @@ class BackendServices {
   async detect(
     photo: File,
     sortResults?: true,
-  ): Promise<DetectDiseaseResponse> {
+  ): Promise<AnalysisResult> {
     // construct the form
     const formData = new FormData();
 
