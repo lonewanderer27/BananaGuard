@@ -8,8 +8,11 @@ import useInsight from "@/hooks/use-insight";
 import DefaultLayout from "@/layouts/default";
 import { AnalysisResult } from "@/types/analysis-result.types";
 import { useAtomValue, useAtom } from "jotai";
+import { useRef, useEffect } from "react";
 
 export default function IndexPage() {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [photo, setPhoto] = useAtom(photoAtom);
   const [question, setQuestion] = useAtom(questionAtom);
   const sampleQuestions = useAtomValue(sampleQuestionsAtom);
@@ -80,6 +83,13 @@ export default function IndexPage() {
   });
   const insightResult = useAtomValue(insightResultAtom);
 
+  // Auto-scroll when detection items change or when pending state changes
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = ref.current.scrollHeight;
+    }
+  }, [detectionItems.length, pendingAnalysis, pendingInsight]);
+
   const handlePhotoChange = (photo: File) => {
     setPhoto(photo);
   }
@@ -91,6 +101,7 @@ export default function IndexPage() {
       return
     }
 
+    console.log(`User asks: ${q}`)
     detect(photo)
   }
 
@@ -113,7 +124,10 @@ export default function IndexPage() {
     >
       {detectionItems.length == 0 && !pendingAnalysis && !pendingInsight &&
         <Onboarding />}
-      <div className="flex flex-col gap-y-5 overflow-y-auto max-h-[calc(100vh-200px)] p-4">
+      <div
+        ref={ref}
+        className="flex flex-col gap-y-5 overflow-y-auto max-h-[calc(100vh-200px)] p-4"
+      >
         {detectionItems.map(item =>
           <DetectionItem
             key={item.id}
