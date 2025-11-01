@@ -47,6 +47,12 @@ export const DetectionInput = ({
     onPhotoChange(null as any);
   }
 
+  const handleKeyEnter = (e: React.KeyboardEvent) => {
+    if (question.trim().length != 0 && e.key == "Enter") {
+      onSubmit(question);
+    }
+  }
+
   return (
     <div className="container flex flex-col gap-y-2 p-3 shadow-[0_-2px_4px_-1px_rgba(0,0,0,0.06)] rounded-xl">
       <section>
@@ -125,6 +131,7 @@ export const DetectionInput = ({
           onChange={(q) => onChange(q.target.value)}
           readOnly={loading}
           value={question}
+          onKeyDown={handleKeyEnter}
         />
         <Button
           variant={question.trim().length == 0 ? "ghost" : undefined}
