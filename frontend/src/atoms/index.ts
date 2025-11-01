@@ -5,9 +5,7 @@ import { atom } from "jotai";
 
 export const imageAtom = atom<File>();
 
-export const questionAtom = atom<String>();
-
-export const exampleQuestionsAtom = atom<String[]>([]);
+export const questionAtom = atom<string>();
 
 export const analysisResultAtom = atom<AnalysisResult>();
 
