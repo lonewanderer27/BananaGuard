@@ -48,49 +48,48 @@ export const DetectionInput = ({
   }
 
   return (
-    <div className="container flex flex-col gap-y-2 p-5">
+    <div className="container flex flex-col gap-y-2 p-3">
       <section>
         <div
           {...getRootProps()}
           className={`rounded-lg cursor-pointer transition-colors ${!photo
-            ? 'border border-dashed border-gray-400 p-6 hover:border-gray-600'
+            ? 'border border-dashed border-gray-400 p-3 hover:border-gray-600'
             : ''
             }`}
         >
           <input {...getInputProps()} />
           {!photo ? (
             <div className="flex items-center gap-2">
-              <FiImage size={32} className="text-gray-400" />
-              <p className="text-sm text-gray-600">
-                {isDragActive ? 'Drop the image file here...' : 'Drag image here or click to browse'}
+              <FiImage size={20} className="text-gray-400" />
+              <p className=" text-sm text-gray-600">
+                {isDragActive ? 'Drop image here' : 'Drag image or click to browse'}
               </p>
             </div>
           ) : (
             <Card className="relative w-fit" radius="sm">
-              <CardBody className="p-2 relative">
-                <Image
-                  src={URL.createObjectURL(photo)}
-                  alt="Preview"
-                  className="max-w-xs max-h-48 object-contain"
-                  classNames={{
-                    wrapper: "max-w-xs max-h-48"
-                  }}
-                  radius="sm"
-                />
-                <Button
-                  isIconOnly
-                  size="sm"
-                  color="danger"
-                  variant="flat"
-                  onClick={handleRemoveImage}
-                  className="absolute top-3 right-3 z-10"
-                  disabled={loading}
-                >
-                  <FiX size={18} />
-                </Button>
-                <p className="text-xs text-gray-500 mt-1 truncate w-full max-w-[190px]">
-                  {photo.name}
-                </p>
+              <CardBody className="p-1.5">
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={URL.createObjectURL(photo)}
+                    alt="Preview"
+                    className="w-12 h-12 object-cover"
+                    radius="sm"
+                  />
+                  <p className="text-xs text-gray-500 truncate flex-1 max-w-[200px]">
+                    {photo.name}
+                  </p>
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    color="danger"
+                    variant="light"
+                    onClick={handleRemoveImage}
+                    className="min-w-unit-8 w-8 h-8"
+                    disabled={loading}
+                  >
+                    <FiX size={16} />
+                  </Button>
+                </div>
               </CardBody>
             </Card>
           )}
@@ -98,29 +97,31 @@ export const DetectionInput = ({
       </section>
       {(sampleQuestions && sampleQuestions.length > 0) &&
         <section>
-          <p className="text-base mb-2">Quick questions:</p>
-          <section className="flex flex-wrap gap-2">
+          <p className="mb-1.5 text-gray-600">Quick questions:</p>
+          <section className="flex flex-wrap gap-1.5">
             {sampleQuestions.slice(0, maxSampleQuestions).map((q) =>
               <Chip
                 id={question}
+                size="lg"
                 variant="flat"
-                className="cursor-pointer"
+                className="cursor-pointer text-xs"
                 onClick={() => onChange(q)}
               >
                 {q}
               </Chip>)}
             {(sampleQuestions.length > maxSampleQuestions && onClickViewMoreQuestions) ?
               <Chip
+                size="lg"
                 variant="flat"
-                className="cursor-pointer"
+                className="cursor-pointer text-xs"
                 onClick={onClickViewMoreQuestions}>
-                View More Questions
+                View More
               </Chip> : ""}
           </section>
         </section>}
       <section className="flex gap-x-2">
         <Input
-          placeholder="Or type your own question..."
+          placeholder="Type your question..."
           onChange={(q) => onChange(q.target.value)}
           readOnly={loading}
           value={question}
@@ -130,8 +131,8 @@ export const DetectionInput = ({
           disabled={question.trim().length == 0}
           onPress={() => onSubmit(question)}
         >
-          {!loading && <>Send <FiSend size={20} /></>}
-          {loading && <>Sending... <Spinner size="sm" /></>}
+          {!loading && <><FiSend size={20} />Send</>}
+          {loading && <Spinner size="sm" />}
         </Button>
       </section>
     </div >
