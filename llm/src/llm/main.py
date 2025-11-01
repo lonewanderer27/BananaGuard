@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from llm.routers.ask import ask_route
 from llm.routers.insight import insight_route
 from llm.query import load_db
@@ -16,6 +17,15 @@ async def lifespan(app: FastAPI):
     yield
 
 bananaLlm = FastAPI(title="BananaGuard LLM", version="0.1", lifespan=lifespan)
+
+bananaLlm.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 bananaLlm.include_router(ask_route)
 bananaLlm.include_router(insight_route)
 
