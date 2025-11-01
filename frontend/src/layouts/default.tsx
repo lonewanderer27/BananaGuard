@@ -9,8 +9,8 @@ export default function DefaultLayout({
 }) {
   return (
     <div className="flex flex-col justify-between h-screen">
-      <Navbar />
-      <main className="container mx-auto px-6 pt-16">
+      {/* <Navbar /> */}
+      <main className="container mx-auto">
         {children}
       </main>
       <footer className="container mx-auto">
