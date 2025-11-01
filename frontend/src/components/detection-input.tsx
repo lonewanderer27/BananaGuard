@@ -84,6 +84,7 @@ export const DetectionInput = ({
                   variant="flat"
                   onClick={handleRemoveImage}
                   className="absolute top-3 right-3 z-10"
+                  disabled={loading}
                 >
                   <FiX size={18} />
                 </Button>
@@ -99,6 +100,7 @@ export const DetectionInput = ({
           <section className="flex flex-wrap gap-2">
             {sampleQuestions.slice(0, maxSampleQuestions).map((q) =>
               <Chip
+                id={question}
                 variant="flat"
                 className="cursor-pointer"
                 onClick={() => onChange(q)}
