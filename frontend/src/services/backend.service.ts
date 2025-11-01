@@ -23,6 +23,9 @@ export class BackendServices {
 
     // make the request
     const res = await backend.post("/detect", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       params: {
         sort_results: sortResults,
       },
