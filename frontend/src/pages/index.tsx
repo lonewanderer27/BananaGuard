@@ -2,6 +2,7 @@ import { analysisResultAtom, detectionItemsAtom, insightResultAtom, photoAtom, q
 import { sampleQuestionsAtom } from "@/atoms/sample-questions-atom";
 import DetectionInput from "@/components/detection-input";
 import DetectionItem from "@/components/detection-item";
+import Onboarding from "@/components/onboarding";
 import useDetect from "@/hooks/use-detect";
 import useInsight from "@/hooks/use-insight";
 import DefaultLayout from "@/layouts/default";
@@ -80,10 +81,8 @@ export default function IndexPage() {
           loading={pendingAnalysis || pendingInsight}
         />}
     >
-      {detectionItems.length == 0 &&
-        <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-          <h1>BananaGuard</h1>
-        </section>}
+      {detectionItems.length == 0 && !pendingAnalysis && !pendingInsight &&
+        <Onboarding />}
       <div className="flex flex-col gap-y-5 overflow-y-auto max-h-[calc(100vh-200px)] p-4">
         {detectionItems.map(item =>
           <DetectionItem
