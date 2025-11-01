@@ -14,16 +14,17 @@ export default function IndexPage() {
   const [question, setQuestion] = useAtom(questionAtom);
   const sampleQuestions = useAtomValue(sampleQuestionsAtom);
 
-  const analysisResult = useAtomValue(analysisResultAtom);
+  const [analysisResult, setAnalysisResult] = useAtom(analysisResultAtom);
   const [detectionItems, setDetectionItems] = useAtom(detectionItemsAtom);
   const { mutate: insight, isPending: pendingInsight } = useInsight({
     onSuccess: (data) => {
       console.log(`Insight Result: ${JSON.stringify(data)}`)
+      console.log(`Analysis Result: ${JSON.stringify(analysisResult)}`)
       setDetectionItems((items) => [...items, {
         id: Date.now().toString(),
-        question,
-        photo,
-        analysisResult,
+        question: question,
+        photo: photo,
+        analysisResult: analysisResult,
         insightResult: data
       }])
     }
@@ -31,7 +32,7 @@ export default function IndexPage() {
 
   const { mutate: detect, isPending: pendingAnalysis } = useDetect({
     onSuccess: (data) => {
-      console.log(`Analysis Result: ${JSON.stringify(data)}`);
+      setAnalysisResult(data);
 
       // Only send record of the highest result for a more sensible insight
       // In our case, since we sort our result by default

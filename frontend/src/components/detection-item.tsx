@@ -4,6 +4,7 @@ import { Image } from "@heroui/image";
 import { Skeleton } from "@heroui/skeleton";
 import { useMemo } from "react";
 import Markdown from 'react-markdown'
+import { AnalysisSummary } from "./analysis-summary";
 
 
 interface DetectionItemProps extends DetectionItemType {
@@ -33,14 +34,20 @@ const DetectionItem = (props: DetectionItemProps) => {
           </CardBody>
         </Card>
       </div>
-      {(props.loading == false && props.insightResult) &&
-        <div>
-          <Card className="max-w-[700px]">
-            <CardBody>
-              <Markdown>{props.insightResult.response}</Markdown>
-            </CardBody>
-          </Card>
-        </div>}
+      <div>
+        {props.analysisResult &&
+          <div>
+            <AnalysisSummary analysis={props.analysisResult} />
+          </div>}
+        {(props.loading == false && props.insightResult) &&
+          <div>
+            <Card className="max-w-[700px]">
+              <CardBody>
+                <Markdown>{props.insightResult.response}</Markdown>
+              </CardBody>
+            </Card>
+          </div>}
+      </div>
       {props.loading &&
         <div>
           <Card className="max-w-[700px]">
