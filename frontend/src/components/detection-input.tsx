@@ -48,7 +48,7 @@ export const DetectionInput = ({
   }
 
   return (
-    <div className="container flex flex-col gap-y-2 p-3">
+    <div className="container flex flex-col gap-y-2 p-3 shadow-[0_-2px_4px_-1px_rgba(0,0,0,0.06)] rounded-xl">
       <section>
         <div
           {...getRootProps()}
