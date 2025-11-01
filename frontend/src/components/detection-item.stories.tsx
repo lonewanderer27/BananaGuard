@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    id: 1,
+    id: "q1",
     photo: bbtvUrl,
     question: "What disease does my banana plant have based on this photo?",
     insightResult: {

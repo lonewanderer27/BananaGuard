@@ -2,9 +2,9 @@ import { AnalysisResult } from "./analysis-result.types";
 import { InsightResult } from "./insight-result.types";
 
 export type DetectionItemType = {
-  id: number;
+  id: string;
+  question: string;
   photo?: File | string;
-  question?: string;
   analysisResult?: AnalysisResult;
   insightResult?: InsightResult;
 };
