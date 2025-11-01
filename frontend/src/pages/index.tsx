@@ -30,6 +30,7 @@ export default function IndexPage() {
         analysisResult: analysisResult,
         insightResult: data
       }])
+      handleClear();
     }
   });
 
@@ -107,6 +108,11 @@ export default function IndexPage() {
 
   const handleClickQuestion = (q: string) => {
     setQuestion(q);
+  }
+
+  const handleClear = () => {
+    setPhoto(undefined);
+    setQuestion('');
   }
 
   return (
