@@ -2,7 +2,6 @@ import hashlib
 import re
 import shutil
 from pathlib import Path
-from plogger.info import plogger.info
 import argparse
 
 from langchain_core.documents import Document
