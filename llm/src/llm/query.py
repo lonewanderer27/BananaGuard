@@ -37,6 +37,10 @@ def retrieve_context(db: Chroma, query_text: str, k: int = 5):
         f"{doc.metadata.get('source')} (id={doc.metadata.get('id')})"
         for doc, _ in results
     ]
+
+    logger.info(f"Context Retrieved: {context_text}")
+    logger.info(f"Sources: {sources}")
+
     return context_text, sources
 
 
