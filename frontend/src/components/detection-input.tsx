@@ -71,9 +71,9 @@ export const DetectionInput = ({
                 <Image
                   src={URL.createObjectURL(photo)}
                   alt="Preview"
-                  className="w-48 h-32 object-cover"
+                  className="max-w-xs max-h-48 object-contain"
                   classNames={{
-                    wrapper: "w-48 h-32"
+                    wrapper: "max-w-xs max-h-48"
                   }}
                   radius="sm"
                 />
@@ -88,7 +88,9 @@ export const DetectionInput = ({
                 >
                   <FiX size={18} />
                 </Button>
-                <p className="text-xs text-gray-500 mt-1 truncate">{photo.name}</p>
+                <p className="text-xs text-gray-500 mt-1 truncate w-full max-w-[190px]">
+                  {photo.name}
+                </p>
               </CardBody>
             </Card>
           )}
