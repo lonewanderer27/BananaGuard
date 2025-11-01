@@ -9,6 +9,7 @@ import { AnalysisSummary } from "./analysis-summary";
 
 interface DetectionItemProps extends DetectionItemType {
   loading: boolean
+  onTap?: (item: DetectionItemType) => void
 }
 
 const DetectionItem = (props: DetectionItemProps) => {
@@ -24,17 +25,21 @@ const DetectionItem = (props: DetectionItemProps) => {
   return (
     <div
       id={props.id.toString()}
-      className="flex flex-col max-w-screen gap-y-5"
+      className={`flex flex-col max-w-screen gap-y-5 ${props.onTap ? 'cursor-pointer' : ''}`}
     >
       <div className="flex max-w-full justify-end">
-        <Card className="max-w-[300px] justify-self-end">
+        <Card
+          className="max-w-[300px] justify-self-end cursor-pointer"
+          isPressable
+          onPress={() => props.onTap?.(props)}
+        >
           <CardBody className="flex gap-2">
             {props.photo && <Image src={photoUrl} />}
             <p>{props.question}</p>
           </CardBody>
         </Card>
       </div>
-      <div>
+      <div className="pointer-events-none">
         {props.analysisResult &&
           <div>
             <AnalysisSummary analysis={props.analysisResult} />
@@ -49,7 +54,7 @@ const DetectionItem = (props: DetectionItemProps) => {
           </div>}
       </div>
       {props.loading &&
-        <div>
+        <div className="pointer-events-none">
           <Card className="max-w-[700px]">
             <CardBody className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">

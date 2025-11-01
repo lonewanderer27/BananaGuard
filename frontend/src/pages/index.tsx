@@ -7,6 +7,7 @@ import useDetect from "@/hooks/use-detect";
 import useInsight from "@/hooks/use-insight";
 import DefaultLayout from "@/layouts/default";
 import { AnalysisResult } from "@/types/analysis-result.types";
+import { DetectionItemType } from "@/types/detection-item.types";
 import { useAtomValue, useAtom } from "jotai";
 import { useRef, useEffect } from "react";
 
@@ -114,6 +115,12 @@ export default function IndexPage() {
     setQuestion('');
   }
 
+  const handlePrefill = (item: DetectionItemType) => {
+    console.log(`Pre-filling a query from a previous detection item: ${item}`)
+    setPhoto(item.photo as File);
+    setQuestion(item.question);
+  }
+
   return (
     <DefaultLayout
       footer={
@@ -137,6 +144,7 @@ export default function IndexPage() {
           <DetectionItem
             key={item.id}
             {...item}
+            onTap={handlePrefill}
           />)}
         {(pendingAnalysis || pendingInsight) &&
           <DetectionItem
