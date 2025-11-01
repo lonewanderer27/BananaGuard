@@ -2,7 +2,7 @@ import hashlib
 import re
 import shutil
 from pathlib import Path
-from pprint import pprint
+from plogger.info import plogger.info
 import argparse
 
 from langchain_core.documents import Document
@@ -11,6 +11,7 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from llm.embeddings import get_model_embeddings
+from llm.core.logger import logger
 
 # ------------------- Paths ------------------- #
 CHROMA_PATH = Path(__file__).parent.parent.parent / 'chroma'
@@ -22,7 +23,7 @@ OTHER_DATA_PATH = Path(__file__).parent.parent.parent / 'data' / 'other'
 def clear_db():
     if CHROMA_PATH.exists():
         shutil.rmtree(CHROMA_PATH)
-        print("✨ Cleared Chroma database")
+        logger.info("✨ Cleared Chroma database")
 
 
 # ------------------- Document Splitter ------------------- #
@@ -132,18 +133,18 @@ def update_chroma(chunks: list[Document]):
 
     # Add new chunks
     if to_add:
-        print(f"👉 Adding {len(to_add)} new chunks")
+        logger.info(f"👉 Adding {len(to_add)} new chunks")
         db.add_documents(to_add, ids=[c.metadata["id"] for c in to_add])
 
     # Update changed chunks
     if to_update:
-        print(f"🔄 Updating {len(to_update)} changed chunks")
+        logger.info(f"🔄 Updating {len(to_update)} changed chunks")
         db.update_documents(
             ids=[c.metadata["id"] for c in to_update],
             documents=to_update
         )
 
-    print("✅ Chroma database is up-to-date")
+    logger.info("✅ Chroma database is up-to-date")
 
 # ------------------- Main Workflow ------------------- #
 def main(reset: bool = False):
@@ -158,7 +159,7 @@ def main(reset: bool = False):
     # Add hashes & IDs
     all_chunks = add_hashes(all_chunks)
 
-    # pprint(all_chunks, indent=4)
+    # plogger.info(all_chunks, indent=4)
 
     # Update Chroma
     update_chroma(all_chunks)
