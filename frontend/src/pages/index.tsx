@@ -96,14 +96,13 @@ export default function IndexPage() {
   }
 
   const handleSubmit = (q: string) => {
-    // TODO: Ensure image is present
-    if (!photo) {
-      // TODO: display an error??
-      return
+    console.log(`User asks: ${q}`)
+    // If there is a photo, use the detect hook
+    if (photo) {
+      detect(photo)
     }
 
-    console.log(`User asks: ${q}`)
-    detect(photo)
+    // TODO: Allow the user to just chat with the AI
   }
 
   const handleClickQuestion = (q: string) => {
