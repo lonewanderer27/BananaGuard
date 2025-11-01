@@ -34,16 +34,45 @@ export default function IndexPage() {
     onSuccess: (data) => {
       setAnalysisResult(data);
 
-      // Only send record of the highest result for a more sensible insight
-      // In our case, since we sort our result by default
-      // The first item should be the conclusive disease
+      // Filter diseases based on percentage differences
       const entries = Object.entries(data);
-      const filteredAnalysis = entries.length > 0
-        ? { [entries[0][0]]: entries[0][1] } as AnalysisResult
-        : {};
+
+      if (entries.length === 0) {
+        insight({
+          analysisResult: {},
+          question: question,
+          sources: false
+        });
+        return;
+      }
+
+      // Sort entries by percentage (descending)
+      entries.sort((a, b) => b[1] - a[1]);
+
+      // Group diseases by similar percentages (within 5% threshold)
+      const threshold = 5;
+      const filteredAnalysis: Record<string, number> = {};
+      const processedPercentages = new Set<number>();
+
+      entries.forEach(([disease, percentage]) => {
+        // Check if this percentage is significantly different from already processed ones
+        const isSimilar = Array.from(processedPercentages).some(
+          processedPerc => Math.abs(processedPerc - percentage) <= threshold
+        );
+
+        if (!isSimilar) {
+          filteredAnalysis[disease] = percentage;
+          processedPercentages.add(percentage);
+        }
+      });
+
+      // Always include the top result
+      if (Object.keys(filteredAnalysis).length === 0) {
+        filteredAnalysis[entries[0][0]] = entries[0][1];
+      }
 
       insight({
-        analysisResult: filteredAnalysis,
+        analysisResult: filteredAnalysis as AnalysisResult,
         question: question,
         sources: false
       })
