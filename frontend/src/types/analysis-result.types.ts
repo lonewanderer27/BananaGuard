@@ -1,3 +1,3 @@
 import { DiseaseType } from "@/enums/disease.enum";
 
-export type AnalysisResult = Record<DiseaseType, number>;
+export type AnalysisResult = Partial<Record<DiseaseType, number>>;
