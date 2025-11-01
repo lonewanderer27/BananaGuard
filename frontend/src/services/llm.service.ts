@@ -31,7 +31,7 @@ export class LLMServices {
     const res = await llm.post("/insight", {
       question,
       retrieve_sources: retrieveSources,
-      analysisResult,
+      analysis_result: analysisResult,
     });
 
     return res.data;
