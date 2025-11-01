@@ -7,6 +7,8 @@ export const imageAtom = atom<File>();
 
 export const questionAtom = atom<String>();
 
+export const exampleQuestionsAtom = atom<String[]>([]);
+
 export const analysisResultAtom = atom<AnalysisResult>();
 
 export const insightResultAtom = atom<InsightResult>();
