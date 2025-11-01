@@ -1,6 +1,6 @@
 # 🍌 Banana Disease Reference
 
-## Panama
+## fusarium_wilt
 
 **Name**
 Panama Disease / Fusarium Wilt (including TR4)
@@ -33,7 +33,7 @@ No reliable chemical eradicates TR4 in soil. Soil fumigants are impractical for 
 
 ---
 
-## BBTV
+## bbtv
 
 Name: BBTV — Banana Bunchy Top Virus
 
@@ -64,7 +64,7 @@ No antiviral chemicals exist. Aphid vectors can be managed with selective insect
 
 ---
 
-## BlackSigatoka
+## sigatoka
 
 Name: Black Sigatoka (Black Leaf Streak) — *Mycosphaerella fijiensis*
 
@@ -99,6 +99,6 @@ Fungicide sprays are essential in commercial plantations. Use systemic (triazole
 
 | Disease | ID            | Cause            | Key Management | Notes |
 |----------|---------------|-------------------|----------------|-------|
-| **Panama (TR4)** | Panama        | Soil-borne fungus | Biosecurity, clean stock, tolerant cultivars, biocontrol | No chemical cure |
-| **BBTV** | BBTV          |Virus via aphids  | Sanitation, vector management, area coordination | Only prevention possible |
-| **Black Sigatoka** | BlackSigatoka | Airborne fungus   | Pruning, fungicide rotation, spacing | Fungicide-dependent |
+| **Panama (TR4)** | panama        | Soil-borne fungus | Biosecurity, clean stock, tolerant cultivars, biocontrol | No chemical cure |
+| **BBTV** | bbtv          |Virus via aphids  | Sanitation, vector management, area coordination | Only prevention possible |
+| **Black Sigatoka** | sigatoka | Airborne fungus   | Pruning, fungicide rotation, spacing | Fungicide-dependent |
