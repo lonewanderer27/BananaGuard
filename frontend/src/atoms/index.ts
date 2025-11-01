@@ -3,7 +3,7 @@ import { DetectionItemType } from "@/types/detection-item.types";
 import { InsightResult } from "@/types/insight-result.types";
 import { atom } from "jotai";
 
-export const imageAtom = atom<File>();
+export const photoAtom = atom<File>();
 
 export const questionAtom = atom<string>("");
 
