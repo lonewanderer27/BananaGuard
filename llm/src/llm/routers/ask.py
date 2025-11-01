@@ -3,6 +3,7 @@ from llm.query import load_db, retrieve_context, generate_response
 from llm.schemas.rag_response import RagResponse
 from llm.schemas.rag_request import AskRequest
 from llm.templates.template_types import TemplateTypes
+from llm.core.logger import logger
 
 ask_route = APIRouter(
     prefix="/ask",
@@ -11,6 +12,8 @@ ask_route = APIRouter(
 
 @ask_route.post('/', response_model=RagResponse)
 def ask(request: Request, body: AskRequest):
+    logger.info(f"Received: {body}")
+
     # load chroma db
     db = request.app.state.db
 

@@ -3,6 +3,7 @@ from llm.query import retrieve_context, generate_response
 from llm.schemas.rag_response import RagResponse
 from llm.schemas.rag_request import InsightRequest
 from llm.templates.template_types import TemplateTypes
+from llm.core.logger import logger
 
 insight_route = APIRouter(
     prefix="/insight",
@@ -11,6 +12,8 @@ insight_route = APIRouter(
 
 @insight_route.post('/', response_model=RagResponse)
 def insight(request: Request, body: InsightRequest):
+    logger.info(f"Received: {body}")
+
     # load chroma db
     db = request.app.state.db
 

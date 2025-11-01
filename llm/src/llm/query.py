@@ -55,7 +55,7 @@ def query_rag(query_text: str, k: int = 5, model_name: str = "gemma3:1b", show_s
     context_text, sources = retrieve_context(db, query_text, k=k)
 
     if not context_text:
-        print("No relevant information found in the database.")
+        logger.info("No relevant information found in the database.")
         return ""
 
     response_text = generate_response(query_text, context_text, model_name=model_name)
@@ -65,7 +65,7 @@ def query_rag(query_text: str, k: int = 5, model_name: str = "gemma3:1b", show_s
     else:
         formatted_response = f"Response:\n{response_text}"
 
-    print(formatted_response)
+    logger.info(formatted_response)
     return response_text
 
 
