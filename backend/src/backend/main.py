@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from backend.routers import detect
 from backend.services.load_model import load_model
 from contextlib import asynccontextmanager
@@ -15,6 +16,14 @@ async def lifespan(app: FastAPI):
     yield
 
 bananaAPI = FastAPI(lifespan=lifespan, title="BananaGuard API", version="0.1")
+
+bananaAPI.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @bananaAPI.get('/')
 async def index():
