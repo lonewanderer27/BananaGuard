@@ -2,16 +2,20 @@ import { Navbar } from "@/components/navbar";
 
 export default function DefaultLayout({
   children,
+  footer,
 }: {
   children: React.ReactNode;
+  footer: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="flex flex-col justify-between h-screen">
       <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+      <main className="container mx-auto px-6 pt-16">
         {children}
       </main>
-      <footer className="w-full flex items-center justify-center py-3" />
+      <footer className="container mx-auto">
+        {footer}
+      </footer>
     </div>
   );
 }
