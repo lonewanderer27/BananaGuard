@@ -22,14 +22,18 @@ export class BackendServices {
     formData.append("photo", photo);
 
     // make the request
-    const res = await backend.post("/detect", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const res = await backend.post(
+      "/detect",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          sort_results: sortResults,
+        },
       },
-      params: {
-        sort_results: sortResults,
-      },
-    });
+    );
 
     // return the data
     return res.data;
