@@ -8,7 +8,7 @@ LOG_DIR.mkdir(exist_ok=True)
 LOG_FILE = LOG_DIR / "app.log"
 
 # Create logger
-logger = logging.getLogger("BananaGuardAPI")
+logger = logging.getLogger("BananaGuardLLM")
 logger.setLevel(logging.DEBUG)
 
 # Prevent duplicate handlers when reloaded by uvicorn
