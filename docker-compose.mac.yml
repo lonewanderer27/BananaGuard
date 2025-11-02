@@ -6,7 +6,7 @@ services:
     depends_on: []  # Disable auto spin up
   ollama:
     deploy:
-      replicas: 0   # Disable container
+      scale: 0   # Disable container
   chromadb:
     deploy:
-      replicas: 0   # Disable container
+      scale: 0   # Disable container
