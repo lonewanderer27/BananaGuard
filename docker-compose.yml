@@ -18,6 +18,9 @@ services:
     depends_on:
       - backend
       - llm
+    environment:
+      - VITE_BACKEND_URL=http://backend:8000
+      - VITE_LLM_URL=http://llm:8001
 
   llm:
     build: ./llm
