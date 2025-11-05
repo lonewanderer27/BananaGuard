@@ -44,12 +44,22 @@ def resolve_model_path() -> Path:
     # Check for MODEL_PATH env var
     model_path = os.getenv('MODEL_PATH')
 
-    if model_path and Path(model_path).exists():
-        return Path(model_path)
+    if model_path:
+        p = Path(model_path)
+        if p.is_file() and p.exists():
+            return p
+        if p.is_dir():
+            candidate = p / MODEL_FILENAME
+            if candidate.exists():
+                return candidate 
+        # if provided path doesn't exist or doesn't contain the model, fall back
 
-    # build a fallback path relative to this file (one level up -> model/<MODEL_FILENAME>)
-    base = Path(__file__).resolve().parent  # src/backend/core
-    fallback = base.parent / 'model' / MODEL_FILENAME  # go up one level
+    # Compute fallback relative to this file:
+    # __file__ -> .../src/backend/services/load_model.py
+    # backend_dir -> .../src/backend
+    base = Path(__file__).resolve().parent  # .../src/backend/services
+    backend_dir = base.parent                 # .../src/backend
+    fallback = backend_dir / 'model' / MODEL_FILENAME  # .../src/backend/model/<MODEL_FILENAME>  
 
     if fallback.exists():
         return fallback
