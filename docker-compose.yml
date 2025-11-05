@@ -39,7 +39,7 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
-      - ./init-ollama.sh:./init-ollama.sh
+      - ./init-ollama.sh:/init-ollama.sh
     deploy:
       resources:
         reservations:
