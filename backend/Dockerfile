@@ -19,7 +19,5 @@ COPY ./src ./src
 
 EXPOSE 8000
 
+ENV PYTHONPATH=/app
 CMD ["poetry", "run", "uvicorn", "src.main:bananaAPI", "--host", "0.0.0.0", "--port", "8000"]
-
-
-FROM python:3.11-slim

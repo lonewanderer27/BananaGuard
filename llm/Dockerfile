@@ -20,4 +20,5 @@ COPY . .
 
 EXPOSE 8001
 
+ENV PYTHONPATH=/app
 CMD ["python", "-m", "uvicorn", "src.llm.main:bananaLlm", "--host", "0.0.0.0", "--port", "8001"]
