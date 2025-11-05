@@ -1,5 +1,6 @@
 import { Card, CardBody } from "@heroui/card";
 import { Progress } from "@heroui/progress";
+
 import { DiseaseType } from "@/enums/disease.enum";
 import { AnalysisResult } from "@/types/analysis-result.types";
 
@@ -26,14 +27,16 @@ export const AnalysisSummary = ({ analysis }: AnalysisSummaryProps) => {
 
   // Step 2: Group diseases with the same value
   const groupedResults: Record<number, string[]> = {};
+
   for (const [key, value] of sortedResults) {
     const v = Number(value?.toFixed(1)); // normalize decimals
+
     if (!groupedResults[v]) groupedResults[v] = [];
     groupedResults[v].push(key);
   }
 
   const sortedGroups = Object.entries(groupedResults).sort(
-    (a, b) => Number(b[0]) - Number(a[0])
+    (a, b) => Number(b[0]) - Number(a[0]),
   );
 
   return (
@@ -44,9 +47,9 @@ export const AnalysisSummary = ({ analysis }: AnalysisSummaryProps) => {
         {sortedGroups.map(([percent, diseases]) => {
           const topGroup = sortedGroups[0][0] === percent;
           const isHealthy = diseases.includes(DiseaseType.Healthy);
-          const label = diseases.map(
-            (d) => DISEASE_LABELS[d as DiseaseType]
-          ).join(", ");
+          const label = diseases
+            .map((d) => DISEASE_LABELS[d as DiseaseType])
+            .join(", ");
 
           return (
             <div key={percent}>
@@ -56,15 +59,9 @@ export const AnalysisSummary = ({ analysis }: AnalysisSummaryProps) => {
               </div>
               <Progress
                 aria-label={label}
-                value={Number(percent)}
-                color={
-                  isHealthy
-                    ? "success"
-                    : topGroup
-                      ? "warning"
-                      : "default"
-                }
                 className="h-2"
+                color={isHealthy ? "success" : topGroup ? "warning" : "default"}
+                value={Number(percent)}
               />
             </div>
           );

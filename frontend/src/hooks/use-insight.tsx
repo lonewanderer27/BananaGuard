@@ -8,7 +8,10 @@ import { InsightResult } from "@/types/insight-result.types";
 import { InsightParams } from "@/types/insight-params.types";
 
 const useInsight = (
-  options?: Omit<UseMutationOptions<InsightResult, Error, InsightParams>, "mutationFn">
+  options?: Omit<
+    UseMutationOptions<InsightResult, Error, InsightParams>,
+    "mutationFn"
+  >,
 ) => {
   const setInsightResult = useSetAtom(insightResultAtom);
 

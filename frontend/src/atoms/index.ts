@@ -1,7 +1,8 @@
+import { atom } from "jotai";
+
 import { AnalysisResult } from "@/types/analysis-result.types";
 import { DetectionItemType } from "@/types/detection-item.types";
 import { InsightResult } from "@/types/insight-result.types";
-import { atom } from "jotai";
 
 export const photoAtom = atom<File>();
 

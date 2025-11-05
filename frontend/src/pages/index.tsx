@@ -1,4 +1,13 @@
-import { analysisResultAtom, detectionItemsAtom, insightResultAtom, photoAtom, questionAtom } from "@/atoms";
+import { useAtomValue, useAtom } from "jotai";
+import { useRef, useEffect } from "react";
+
+import {
+  analysisResultAtom,
+  detectionItemsAtom,
+  insightResultAtom,
+  photoAtom,
+  questionAtom,
+} from "@/atoms";
 import { sampleQuestionsAtom } from "@/atoms/sample-questions-atom";
 import DetectionInput from "@/components/detection-input";
 import DetectionItem from "@/components/detection-item";
@@ -8,8 +17,6 @@ import useInsight from "@/hooks/use-insight";
 import DefaultLayout from "@/layouts/default";
 import { AnalysisResult } from "@/types/analysis-result.types";
 import { DetectionItemType } from "@/types/detection-item.types";
-import { useAtomValue, useAtom } from "jotai";
-import { useRef, useEffect } from "react";
 
 export default function IndexPage() {
   const ref = useRef<HTMLDivElement>(null);
@@ -22,17 +29,20 @@ export default function IndexPage() {
   const [detectionItems, setDetectionItems] = useAtom(detectionItemsAtom);
   const { mutate: insight, isPending: pendingInsight } = useInsight({
     onSuccess: (data) => {
-      console.log(`Insight Result: ${JSON.stringify(data)}`)
-      console.log(`Analysis Result: ${JSON.stringify(analysisResult)}`)
-      setDetectionItems((items) => [...items, {
-        id: Date.now().toString(),
-        question: question,
-        photo: photo,
-        analysisResult: analysisResult,
-        insightResult: data
-      }])
+      console.log(`Insight Result: ${JSON.stringify(data)}`);
+      console.log(`Analysis Result: ${JSON.stringify(analysisResult)}`);
+      setDetectionItems((items) => [
+        ...items,
+        {
+          id: Date.now().toString(),
+          question: question,
+          photo: photo,
+          analysisResult: analysisResult,
+          insightResult: data,
+        },
+      ]);
       handleClear();
-    }
+    },
   });
 
   const { mutate: detect, isPending: pendingAnalysis } = useDetect({
@@ -46,8 +56,9 @@ export default function IndexPage() {
         insight({
           analysisResult: {},
           question: question,
-          sources: false
+          sources: false,
         });
+
         return;
       }
 
@@ -62,7 +73,7 @@ export default function IndexPage() {
       entries.forEach(([disease, percentage]) => {
         // Check if this percentage is significantly different from already processed ones
         const isSimilar = Array.from(processedPercentages).some(
-          processedPerc => Math.abs(processedPerc - percentage) <= threshold
+          (processedPerc) => Math.abs(processedPerc - percentage) <= threshold,
         );
 
         if (!isSimilar) {
@@ -79,9 +90,9 @@ export default function IndexPage() {
       insight({
         analysisResult: filteredAnalysis as AnalysisResult,
         question: question,
-        sources: false
-      })
-    }
+        sources: false,
+      });
+    },
   });
   const insightResult = useAtomValue(insightResultAtom);
 
@@ -94,69 +105,68 @@ export default function IndexPage() {
 
   const handlePhotoChange = (photo: File) => {
     setPhoto(photo);
-  }
+  };
 
   const handleSubmit = (q: string) => {
-    console.log(`User asks: ${q}`)
+    console.log(`User asks: ${q}`);
     // If there is a photo, use the detect hook
     if (photo) {
-      detect(photo)
+      detect(photo);
     }
 
     // TODO: Allow the user to just chat with the AI
-  }
+  };
 
   const handleClickQuestion = (q: string) => {
     setQuestion(q);
-  }
+  };
 
   const handleClear = () => {
     setPhoto(undefined);
-    setQuestion('');
-  }
+    setQuestion("");
+  };
 
   const handlePrefill = (item: DetectionItemType) => {
-    console.log(`Pre-filling a query from a previous detection item: ${item}`)
+    console.log(`Pre-filling a query from a previous detection item: ${item}`);
     setPhoto(item.photo as File);
     setQuestion(item.question);
-  }
+  };
 
   return (
     <DefaultLayout
       footer={
         <DetectionInput
-          photo={photo}
-          onPhotoChange={handlePhotoChange}
-          sampleQuestions={sampleQuestions}
-          question={question ?? ''}
-          onChange={handleClickQuestion}
-          onSubmit={handleSubmit}
           loading={pendingAnalysis || pendingInsight}
-        />}
+          photo={photo}
+          question={question ?? ""}
+          sampleQuestions={sampleQuestions}
+          onChange={handleClickQuestion}
+          onPhotoChange={handlePhotoChange}
+          onSubmit={handleSubmit}
+        />
+      }
     >
-      {detectionItems.length == 0 && !pendingAnalysis && !pendingInsight &&
-        <Onboarding />}
+      {detectionItems.length == 0 && !pendingAnalysis && !pendingInsight && (
+        <Onboarding />
+      )}
       <div
         ref={ref}
         className="flex flex-col gap-y-5 overflow-y-auto max-h-[calc(100vh-200px)] p-4"
       >
-        {detectionItems.map(item =>
-          <DetectionItem
-            key={item.id}
-            {...item}
-            onTap={handlePrefill}
-          />)}
-        {(pendingAnalysis || pendingInsight) &&
+        {detectionItems.map((item) => (
+          <DetectionItem key={item.id} {...item} onTap={handlePrefill} />
+        ))}
+        {(pendingAnalysis || pendingInsight) && (
           <DetectionItem
             key={"pending"}
-            id="pending"
-            question={question}
-            photo={photo}
-            loading={pendingInsight}
             analysisResult={analysisResult}
+            id="pending"
             insightResult={insightResult}
+            loading={pendingInsight}
+            photo={photo}
+            question={question}
           />
-        }
+        )}
       </div>
     </DefaultLayout>
   );

@@ -6,7 +6,7 @@ import { AnalysisResult } from "@/types/analysis-result.types";
 import { analysisResultAtom } from "@/atoms";
 
 const useDetect = (
-  options?: Omit<UseMutationOptions<AnalysisResult, Error, File>, "mutationFn">
+  options?: Omit<UseMutationOptions<AnalysisResult, Error, File>, "mutationFn">,
 ) => {
   const setAnalysisResult = useSetAtom(analysisResultAtom);
 
