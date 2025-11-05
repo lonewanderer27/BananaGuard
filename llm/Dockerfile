@@ -12,7 +12,7 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry export -f requirements.txt --output requirements.txt \
     && pip install --no-cache-dir -r requirements.txt
 
-# Copy rest of the code 
+# Copy application source
 COPY . .
 
 EXPOSE 8001

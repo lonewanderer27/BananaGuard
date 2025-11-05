@@ -13,7 +13,7 @@ RUN poetry export -f requirements.txt --without dev --output requirements.txt \
     && pip install --no-cache-dir -r requirements.txt
 
 # Copy application source
-COPY ./src ./src
+COPY . .
 
 EXPOSE 8000
 
