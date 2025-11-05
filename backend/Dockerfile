@@ -12,6 +12,9 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry export -f requirements.txt --without dev --output requirements.txt \
     && pip install --no-cache-dir -r requirements.txt
 
+# Reinstall tensorflow with cuda drivers
+RUN pip install tensorflow[and-cuda] 
+
 # Copy application source
 COPY . .
 
