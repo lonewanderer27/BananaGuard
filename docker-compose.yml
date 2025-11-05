@@ -12,7 +12,7 @@ services:
     build: ./frontend
     container_name: "banana_web"
     ports:
-      - "5174:5174"
+      - "4173:4173"
     depends_on:
       - backend
       - llm
