@@ -11,7 +11,7 @@ from llm.templates.template_types import TemplateTypes
 from llm.templates.prompt_builder import prompt_builder
 from typing import Optional
 
-def _running_in_container() -> bool:
+def running_in_container() -> bool:
     try:
         if Path("/.dockerenv").exists():
             return True
@@ -21,7 +21,7 @@ def _running_in_container() -> bool:
         return False
     
 OLLAMA_URL = os.getenv("OLLAMA_URL") or (
-    "http://host.docker.internal:11434" if _running_in_container() else "http://localhost:11434"
+    "http://host.docker.internal:11434" if running_in_container() else "http://localhost:11434"
 )
 
 def load_db() -> Chroma:
