@@ -20,4 +20,4 @@ EXPOSE 8000
 # Make sure Python can find `src/` as a module root
 ENV PYTHONPATH="/app/src"
 
-CMD ["poetry", "run", "uvicorn", "src.main:bananaAPI", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "src.backend.main:bananaAPI", "--host", "0.0.0.0", "--port", "8000"]
