@@ -20,5 +20,7 @@ COPY . .
 
 EXPOSE 8001
 
-ENV PYTHONPATH=/app
+# Make sure Python can find `src/` as a module root
+ENV PYTHONPATH="/app/src"
+
 CMD ["python", "-m", "uvicorn", "src.llm.main:bananaLlm", "--host", "0.0.0.0", "--port", "8001"]

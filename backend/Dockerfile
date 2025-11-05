@@ -19,5 +19,7 @@ COPY ./src ./src
 
 EXPOSE 8000
 
-ENV PYTHONPATH=/app
+# Make sure Python can find `src/` as a module root
+ENV PYTHONPATH="/app/src"
+
 CMD ["poetry", "run", "uvicorn", "src.main:bananaAPI", "--host", "0.0.0.0", "--port", "8000"]
