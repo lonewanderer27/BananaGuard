@@ -1,4 +1,5 @@
 import argparse
+import os
 from pathlib import Path
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,6 +11,8 @@ from llm.templates.template_types import TemplateTypes
 from llm.templates.prompt_builder import prompt_builder
 from typing import Optional
 
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+
 def load_db() -> Chroma:
     """Load Chroma DB with embeddings."""
     try:
@@ -17,7 +20,7 @@ def load_db() -> Chroma:
         embedding_function = get_model_embeddings()
         db = Chroma(
             persist_directory=CHROMA_PATH.as_posix(),
-            embedding_function=embedding_function
+            embedding_function=embedding_function,
         )
         logger.info("DB loaded successfully")
         return db
@@ -49,7 +52,10 @@ def generate_response(query_text: str, context_text: str, type: TemplateTypes, a
     prompt_template = ChatPromptTemplate.from_template(prompt_builder(type, context_text, query_text, analysis))
     prompt = prompt_template.format(context=context_text, question=query_text)
 
-    model = OllamaLLM(model=model_name)
+    model = OllamaLLM(
+        model=model_name,
+        base_url=OLLAMA_URL
+    )
     response_text = model.invoke(prompt)
     return response_text
 
