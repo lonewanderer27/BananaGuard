@@ -47,9 +47,9 @@ def resolve_model_path() -> Path:
     if model_path and Path(model_path).exists():
         return Path(model_path)
 
-    # build a fallback path relative to this file (three levels up -> model/<MODEL_FILENAME>)
+    # build a fallback path relative to this file (one level up -> model/<MODEL_FILENAME>)
     base = Path(__file__).resolve().parent  # src/backend/core
-    fallback = base.parents[3] / 'model' / MODEL_FILENAME  # go up three levels
+    fallback = base.parent / 'model' / MODEL_FILENAME  # go up one level
 
     if fallback.exists():
         return fallback
