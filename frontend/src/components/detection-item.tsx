@@ -10,6 +10,7 @@ import { DetectionItemType } from "@/types/detection-item.types";
 
 interface DetectionItemProps extends DetectionItemType {
   loading: boolean;
+  showAnalysisResult: boolean;
   onTap?: (item: DetectionItemType) => void;
 }
 
@@ -44,7 +45,7 @@ const DetectionItem = (props: DetectionItemProps) => {
         </Card>
       </div>
       <div className="pointer-events-none">
-        {props.analysisResult && (
+        {(props.showAnalysisResult && props.analysisResult) && (
           <div>
             <AnalysisSummary analysis={props.analysisResult} />
           </div>
@@ -82,6 +83,7 @@ const DetectionItem = (props: DetectionItemProps) => {
 
 DetectionItem.defaultProps = {
   loading: false,
+  showAnalysisResult: false
 };
 
 export default DetectionItem;
