@@ -37,7 +37,6 @@ services:
       - chroma_data:/chroma
 
 volumes:
-  ollama_data:
   chroma_data:
 
 networks:
