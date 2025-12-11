@@ -9,14 +9,14 @@ import { Card, CardBody } from "@heroui/card";
 
 export const DetectionInput = ({
   sampleQuestions,
-  maxSampleQuestions,
+  maxSampleQuestions = 5,
   onClickViewMoreQuestions,
   photo,
   onPhotoChange,
   question,
   onChange,
   onSubmit,
-  loading,
+  loading = false,
 }: {
   photo?: File;
   onPhotoChange: (photo: File) => void;
@@ -58,11 +58,10 @@ export const DetectionInput = ({
       <section>
         <div
           {...getRootProps()}
-          className={`rounded-lg cursor-pointer transition-colors ${
-            !photo
-              ? "border border-dashed border-gray-400 p-3 hover:border-gray-600"
-              : ""
-          }`}
+          className={`rounded-lg cursor-pointer transition-colors ${!photo
+            ? "border border-dashed border-gray-400 p-3 hover:border-gray-600"
+            : ""
+            }`}
         >
           <input {...getInputProps()} />
           {!photo ? (
@@ -121,7 +120,7 @@ export const DetectionInput = ({
               </Chip>
             ))}
             {sampleQuestions.length > maxSampleQuestions &&
-            onClickViewMoreQuestions ? (
+              onClickViewMoreQuestions ? (
               <Chip
                 className="cursor-pointer text-xs"
                 size="lg"
@@ -160,11 +159,6 @@ export const DetectionInput = ({
       </section>
     </div>
   );
-};
-
-DetectionInput.defaultProps = {
-  maxSampleQuestions: 5,
-  loading: false,
 };
 
 export default DetectionInput;
