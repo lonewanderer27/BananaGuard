@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@heroui/card";
 import { Image } from "@heroui/image";
 import { Skeleton } from "@heroui/skeleton";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import Markdown from "react-markdown";
 
 import { AnalysisSummary } from "./analysis-summary";
@@ -14,7 +14,11 @@ interface DetectionItemProps extends DetectionItemType {
   onTap?: (item: DetectionItemType) => void;
 }
 
-const DetectionItem = (props: DetectionItemProps) => {
+const DetectionItem = memo(({
+  loading = false,
+  showAnalysisResult = false,
+  ...props
+}: DetectionItemProps) => {
   const photoUrl =
     typeof props.photo === "string"
       ? props.photo
@@ -45,12 +49,12 @@ const DetectionItem = (props: DetectionItemProps) => {
         </Card>
       </div>
       <div className="pointer-events-none">
-        {(props.showAnalysisResult && props.analysisResult) && (
+        {(showAnalysisResult && props.analysisResult) && (
           <div>
             <AnalysisSummary analysis={props.analysisResult} />
           </div>
         )}
-        {props.loading == false && props.insightResult && (
+        {loading == false && props.insightResult && (
           <div>
             <Card className="max-w-[700px]">
               <CardBody>
@@ -60,7 +64,7 @@ const DetectionItem = (props: DetectionItemProps) => {
           </div>
         )}
       </div>
-      {props.loading && (
+      {loading && (
         <div className="pointer-events-none">
           <Card className="max-w-[700px]">
             <CardBody className="flex flex-col gap-4">
@@ -79,11 +83,13 @@ const DetectionItem = (props: DetectionItemProps) => {
       )}
     </div>
   );
-};
-
-DetectionItem.defaultProps = {
-  loading: false,
-  showAnalysisResult: false
-};
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.question === nextProps.question &&
+    prevProps.loading === nextProps.loading &&
+    prevProps.insightResult?.response === nextProps.insightResult?.response
+  );
+});
 
 export default DetectionItem;

@@ -1,5 +1,5 @@
 import { useAtomValue, useAtom } from "jotai";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 import {
   analysisResultAtom,
@@ -20,6 +20,7 @@ import { DetectionItemType } from "@/types/detection-item.types";
 
 export default function IndexPage() {
   const ref = useRef<HTMLDivElement>(null);
+  const [localQuestion, setLocalQuestion] = useState("");
 
   const [photo, setPhoto] = useAtom(photoAtom);
   const [question, setQuestion] = useAtom(questionAtom);
@@ -34,7 +35,7 @@ export default function IndexPage() {
       setDetectionItems((items) => [
         ...items,
         {
-          id: Date.now().toString(),
+          id: Date.now().toString() + question + photo?.name,
           question: question,
           photo: photo,
           analysisResult: analysisResult,
@@ -94,7 +95,7 @@ export default function IndexPage() {
       });
     },
   });
-  const insightResult = useAtomValue(insightResultAtom);
+  const insightResult = useAtomValue(insightResultAtom); // Only for pending
 
   // Auto-scroll when detection items change or when pending state changes
   useEffect(() => {
@@ -103,34 +104,35 @@ export default function IndexPage() {
     }
   }, [detectionItems.length, pendingAnalysis, pendingInsight]);
 
-  const handlePhotoChange = (photo: File) => {
+  const handlePhotoChange = useCallback((photo: File) => {
     setPhoto(photo);
-  };
+  }, []);
 
   const handleSubmit = (q: string) => {
-    console.log(`User asks: ${q}`);
     // If there is a photo, use the detect hook
-    if (photo) {
+    if (photo && q.trim().length > 0) {
+      console.log(`User asks: ${q}`);
+      setQuestion(q);
       detect(photo);
     }
 
     // TODO: Allow the user to just chat with the AI
   };
 
-  const handleClickQuestion = (q: string) => {
-    setQuestion(q);
-  };
+  const handleClickQuestion = useCallback((q: string) => {
+    setLocalQuestion(q);
+  }, []);
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setPhoto(undefined);
     setQuestion("");
-  };
+  }, []);
 
-  const handlePrefill = (item: DetectionItemType) => {
+  const handlePrefill = useCallback((item: DetectionItemType) => {
     console.log(`Pre-filling a query from a previous detection item: ${item}`);
     setPhoto(item.photo as File);
     setQuestion(item.question);
-  };
+  }, []);
 
   return (
     <DefaultLayout
@@ -138,11 +140,12 @@ export default function IndexPage() {
         <DetectionInput
           loading={pendingAnalysis || pendingInsight}
           photo={photo}
-          question={question ?? ""}
+          question={localQuestion}
           sampleQuestions={sampleQuestions}
           onChange={handleClickQuestion}
           onPhotoChange={handlePhotoChange}
           onSubmit={handleSubmit}
+          maxSampleQuestions={3}
         />
       }
     >
@@ -154,7 +157,14 @@ export default function IndexPage() {
         className="flex flex-col gap-y-5 overflow-y-auto max-h-[calc(100vh-200px)] p-4"
       >
         {detectionItems.map((item) => (
-          <DetectionItem key={item.id} {...item} onTap={handlePrefill} />
+          <DetectionItem
+            {...item}
+            id={item.id}
+            key={item.id}
+            loading={false}
+            showAnalysisResult={false}
+            onTap={handlePrefill}
+          />
         ))}
         {(pendingAnalysis || pendingInsight) && (
           <DetectionItem
@@ -163,6 +173,7 @@ export default function IndexPage() {
             id="pending"
             insightResult={insightResult}
             loading={pendingInsight}
+            showAnalysisResult={false}
             photo={photo}
             question={question}
           />
