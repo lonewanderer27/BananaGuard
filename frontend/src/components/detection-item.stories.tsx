@@ -23,6 +23,6 @@ export const Default: Story = {
         "The primary threat to your banana crop is BBTV, a viral disease caused by *Banana Bunchy Top Virus* (BBTV). It’s a significant problem in the Philippines, and requires proactive management.\n\n",
     },
     loading: false,
-    showAnalysisResult: true
+    showAnalysisResult: true,
   },
 };

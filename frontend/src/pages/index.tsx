@@ -111,7 +111,9 @@ export default function IndexPage() {
   const handleSubmit = (q: string) => {
     // If there is a photo, use the detect hook
     if (photo && q.trim().length > 0) {
-      console.log(`User asks: ${q}`);
+      if (process.env.NODE_ENV === "development") {
+        console.log(`User asks: ${q}`);
+      }
       setQuestion(q);
       detect(photo);
     }
@@ -129,7 +131,11 @@ export default function IndexPage() {
   }, []);
 
   const handlePrefill = useCallback((item: DetectionItemType) => {
-    console.log(`Pre-filling a query from a previous detection item: ${item}`);
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `Pre-filling a query from a previous detection item: ${item}`,
+      );
+    }
     setPhoto(item.photo as File);
     setQuestion(item.question);
   }, []);
@@ -139,13 +145,13 @@ export default function IndexPage() {
       footer={
         <DetectionInput
           loading={pendingAnalysis || pendingInsight}
+          maxSampleQuestions={3}
           photo={photo}
           question={localQuestion}
           sampleQuestions={sampleQuestions}
           onChange={handleClickQuestion}
           onPhotoChange={handlePhotoChange}
           onSubmit={handleSubmit}
-          maxSampleQuestions={3}
         />
       }
     >
@@ -159,8 +165,8 @@ export default function IndexPage() {
         {detectionItems.map((item) => (
           <DetectionItem
             {...item}
-            id={item.id}
             key={item.id}
+            id={item.id}
             loading={false}
             showAnalysisResult={false}
             onTap={handlePrefill}
@@ -173,9 +179,9 @@ export default function IndexPage() {
             id="pending"
             insightResult={insightResult}
             loading={pendingInsight}
-            showAnalysisResult={false}
             photo={photo}
             question={question}
+            showAnalysisResult={false}
           />
         )}
       </div>
