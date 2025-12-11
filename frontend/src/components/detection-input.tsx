@@ -111,7 +111,8 @@ export const DetectionInput = ({
             {sampleQuestions.slice(0, maxSampleQuestions).map((q) => (
               <Chip
                 className="cursor-pointer text-xs"
-                id={question}
+                id={q}
+                key={q}
                 size="lg"
                 variant="flat"
                 onClick={() => onChange(q)}
