@@ -230,9 +230,9 @@ export const DetectionInput = memo(
 
     const showViewMore = useMemo(
       () =>
-        sampleQuestions &&
-        sampleQuestions.length > maxSampleQuestions &&
-        !!onClickViewMoreQuestions,
+        !!(sampleQuestions &&
+          sampleQuestions.length > maxSampleQuestions &&
+          onClickViewMoreQuestions),
       [sampleQuestions, maxSampleQuestions, onClickViewMoreQuestions],
     );
 
